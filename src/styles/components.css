@@ -2261,7 +2261,6 @@
   }
   /* A heading straight above a field or row of fields */
   :where(form, .card__body, .stack) > :where(h2, h3) + :where(.field, .row-2) {
-
     margin-top: 0.75rem;
   }
 }
@@ -2276,7 +2275,6 @@
   .signup-card .card__body > :is(h2, h3) {
     margin-bottom: 0;
   }
-}
 }
 
 @layer components {
@@ -2300,7 +2298,6 @@
   :is(h1, h2, h3, h4) + .data-table-toolbar,
   :is(h1, h2, h3, h4) + .table-wrap,
   :is(h1, h2, h3, h4) + .mobile-sort {
-
     margin-top: 0.75rem;
   }
 }
