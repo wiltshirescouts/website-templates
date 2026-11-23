@@ -17,11 +17,9 @@ export interface FieldProps {
 
 export function RequiredMark() {
   return (
-    <>
-      <span className="req" aria-hidden="true">
-        *
-      </span>
-    </>
+    <span className="req" aria-hidden="true">
+      *
+    </span>
   );
 }
 

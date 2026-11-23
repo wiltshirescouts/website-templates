@@ -218,6 +218,24 @@
   .scroll-table table.data { min-width: 44rem; }
   .scroll-table th:first-child, .scroll-table td:first-child { position: sticky; left: 0; background: var(--card); box-shadow: 1px 0 0 var(--border); }
   .scroll-table thead th:first-child { background: var(--muted); }
+  /* From the mockup's theme.css (page header and caption on narrow screens) */
+  .page-header__text { flex: 1 1 16rem; }
+  @media (max-width: 639px) { .page-header__actions { width: 100%; } .page-header__actions .btn { width: 100%; } table.data caption { display: block; width: 100%; } }
+  /* Scroll mode: keep the real table below 640px instead of cards (additive override of the card rules above) */
+  @media (max-width: 639px) {
+    .scroll-table table.data { display: table; }
+    .scroll-table table.data thead { display: table-header-group; position: static; width: auto; height: auto; overflow: visible; clip: auto; }
+    .scroll-table table.data tbody { display: table-row-group; }
+    .scroll-table table.data tr { display: table-row; }
+    .scroll-table table.data th, .scroll-table table.data td { display: table-cell; text-align: left; padding: .75rem 1rem; }
+    .scroll-table table.data thead th { padding-block: .25rem; }
+    .scroll-table table.data td::before { content: none; }
+    .scroll-table table.data tbody tr { padding: 0; }
+    .scroll-table table.data tbody tr + tr { border-top: 0; }
+    .scroll-table table.data tbody tr + tr td, .scroll-table table.data tbody tr + tr th { border-top: 1px solid var(--border); }
+    .scroll-table table.data td { border: 0; }
+    .scroll-table table.data td.num { text-align: right; }
+  }
   
   /* ------------------------------------------------------------------ account button + popover (header)
      Holds sign-in / user details AND the colour mode control. shadcn: Popover (or DropdownMenu with a custom item). */

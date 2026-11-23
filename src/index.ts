@@ -19,3 +19,4 @@ export * from "./ui/StatusChip";
 export * from "./ui/Steps";
 export * from "./ui/Tabs";
 export * from "./forms";
+export * from "./table";
