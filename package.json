@@ -1,0 +1,79 @@
+{
+  "name": "@wiltshirescouts/theme",
+  "version": "0.1.0",
+  "description": "Shared Scouts Wiltshire website theme: tokens, fonts, logos, layout and form components, Microsoft 365 sign-in and Brevo helpers.",
+  "type": "module",
+  "sideEffects": [
+    "**/*.css"
+  ],
+  "exports": {
+    ".": {
+      "types": "./src/index.ts",
+      "default": "./src/index.ts"
+    },
+    "./server": {
+      "types": "./src/server/index.ts",
+      "default": "./src/server/index.ts"
+    },
+    "./theme.css": "./src/styles/theme.css",
+    "./fonts.css": "./src/styles/fonts.css",
+    "./no-flash": {
+      "types": "./src/theme/noFlash.ts",
+      "default": "./src/theme/noFlash.ts"
+    },
+    "./assets/*": "./src/assets/*"
+  },
+  "files": [
+    "src",
+    "README.md",
+    "CHANGELOG.md"
+  ],
+  "scripts": {
+    "dev": "vite --config playground/vite.config.ts",
+    "build:playground": "vite build --config playground/vite.config.ts",
+    "typecheck": "tsc --noEmit",
+    "lint": "biome check .",
+    "test": "vitest run",
+    "test:e2e": "playwright test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wiltshirescouts/website-templates.git"
+  },
+  "license": "UNLICENSED",
+  "private": true,
+  "peerDependencies": {
+    "react": "^19",
+    "react-dom": "^19",
+    "tailwindcss": "^4"
+  },
+  "dependencies": {
+    "@tanstack/react-table": "^8.21.3",
+    "@wiltshirescouts/email-template": "git+https://github.com/wiltshirescouts/email-template.git#v1.0.1",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "jose": "^6.2.18",
+    "lucide-react": "^1.77.0",
+    "radix-ui": "^1.8.1",
+    "tailwind-merge": "^3.7.1"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "^4.14.0",
+    "@playwright/test": "^1.65.1",
+    "@tailwindcss/vite": "^4.3.5",
+    "@testing-library/react": "^16.3.0",
+    "@types/node": "^26.6.6",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "@vitejs/plugin-react": "^6.3.0",
+    "jsdom": "^26.0.0",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1",
+    "react-router-dom": "^7.18.6",
+    "tailwindcss": "^4.3.5",
+    "typescript": "^7.0.2",
+    "vite": "^8.3.8",
+    "vitest": "^5.1.1",
+    "@biomejs/biome": "^2.0.0"
+  }
+}
