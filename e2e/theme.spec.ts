@@ -20,13 +20,17 @@ test("choice persists across reloads (localStorage on localhost), and Auto clear
   expect(await page.evaluate(() => localStorage.getItem("ws-theme"))).toBeNull();
 });
 
-test("a ws-theme cookie from another wiltshirescouts site is honoured before first paint", async ({ context, page }) => {
+test("a ws-theme cookie from another wiltshirescouts site is honoured before first paint", async ({
+  context,
+  page,
+}) => {
   await context.addCookies([{ name: "ws-theme", value: "dark", url: "http://localhost:5199" }]);
   await page.emulateMedia({ colorScheme: "light" });
   await page.addInitScript(() => {
     (window as unknown as { __first?: string }).__first = undefined;
     document.addEventListener("DOMContentLoaded", () => {
-      (window as unknown as { __first?: string }).__first = document.documentElement.getAttribute("data-theme") ?? "";
+      (window as unknown as { __first?: string }).__first =
+        document.documentElement.getAttribute("data-theme") ?? "";
     });
   });
   await page.goto("/content");
@@ -43,6 +47,8 @@ test("reduced motion removes the colour slider animation", async ({ page }) => {
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.goto("/content");
   await page.getByRole("button", { name: "Account and colour mode" }).click();
-  const t = await page.locator(".mode-seg").evaluate((el) => getComputedStyle(el, "::before").transitionDuration);
+  const t = await page
+    .locator(".mode-seg")
+    .evaluate((el) => getComputedStyle(el, "::before").transitionDuration);
   expect(t).toBe("0s");
 });

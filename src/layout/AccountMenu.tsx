@@ -1,4 +1,4 @@
-import { CircleUser, LogIn, LogOut, UserRound } from "lucide-react";
+import { CircleUser, LogIn, LogOut, SunMoon, UserRound } from "lucide-react";
 import { type ReactNode, useCallback, useEffect, useId, useRef, useState } from "react";
 import { ColourModeControl } from "./ColourModeControl";
 
@@ -85,9 +85,9 @@ export function AccountMenu({ account }: { account: AccountConfig }) {
         onClick={() => setOpen((o) => !o)}
       >
         {account.variant === "signed-in" ? (
-          <span className="avatar" aria-hidden="true">
-            {initials(account.name)}
-          </span>
+          <span className="avatar" aria-hidden="true" data-initials={initials(account.name)} />
+        ) : account.variant === "colour-only" ? (
+          <SunMoon className="icon icon-lg" aria-hidden="true" focusable="false" />
         ) : (
           <CircleUser className="icon icon-lg" aria-hidden="true" focusable="false" />
         )}

@@ -7,7 +7,7 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import { ArrowDown, ArrowUp, ArrowUpDown } from "lucide-react";
-import { type ReactNode, useId, useState } from "react";
+import { type ReactNode, useId, useMemo, useState } from "react";
 import { cn } from "../lib/cn";
 
 export type SortDirection = "ascending" | "descending";
@@ -96,14 +96,19 @@ export function DataTable<T>({
   const [announce, setAnnounce] = useState("");
   const sort = sortProp !== undefined ? sortProp : inner;
 
-  const defs: ColumnDef<T>[] = columns.map((c, i) => ({
-    id: colId(c, i),
-    header: c.header,
-    accessorFn: (row: T) =>
-      typeof c.accessor === "function" ? c.accessor(row) : (row[c.accessor] as unknown),
-    sortingFn: (c.type === "number" ? numberSort : textSort) as unknown as SortingFn<T>,
-    enableSorting: c.sortable !== false,
-  }));
+  // Stable column definitions: new ones on every render make TanStack Table reset its state in a loop.
+  const defs: ColumnDef<T>[] = useMemo(
+    () =>
+      columns.map((c, i) => ({
+        id: colId(c, i),
+        header: c.header,
+        accessorFn: (row: T) =>
+          typeof c.accessor === "function" ? c.accessor(row) : (row[c.accessor] as unknown),
+        sortingFn: (c.type === "number" ? numberSort : textSort) as unknown as SortingFn<T>,
+        enableSorting: c.sortable !== false,
+      })),
+    [columns],
+  );
 
   const table = useReactTable({
     data,
@@ -114,6 +119,7 @@ export function DataTable<T>({
     getSortedRowModel: getSortedRowModel(),
     enableSortingRemoval: false,
     enableMultiSort: false,
+    autoResetPageIndex: false,
   });
 
   const label = (id: string) => columns.find((c, i) => colId(c, i) === id)?.header ?? id;
@@ -166,7 +172,7 @@ export function DataTable<T>({
             className="btn btn-outline"
             type="button"
             style={{ minHeight: "3rem", minWidth: "7rem" }}
-            aria-label={`Sort direction: ${dir}. Activate to sort ${opposite(dir)}.`}
+            aria-label={`${dir === "ascending" ? "A to Z" : "Z to A"}. Sort direction: ${dir}. Activate to sort ${opposite(dir)}.`}
             onClick={() => apply({ id: sort?.id ?? sortable[0]?.id ?? "", direction: opposite(dir) })}
           >
             {dir === "ascending" ? (

@@ -2,6 +2,7 @@ import { expect, test } from "@playwright/test";
 
 test("keyboard path: skip link, account menu, colour control", async ({ page }) => {
   await page.goto("/content?mode=light");
+  await expect(page.locator("h1")).toBeVisible();
   await page.keyboard.press("Tab");
   const skip = page.getByRole("link", { name: "Skip to content" });
   await expect(skip).toBeFocused();

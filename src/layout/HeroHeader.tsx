@@ -13,7 +13,14 @@ export interface HeroHeaderProps {
 }
 
 /** Tall purple band with the large logo, icon tile, title and intro, then the ribbon. Pair with `HeroMain`. */
-export function HeroHeader({ title, intro, icon: Icon, account, homeHref = "/", mainId = "main" }: HeroHeaderProps) {
+export function HeroHeader({
+  title,
+  intro,
+  icon: Icon,
+  account,
+  homeHref = "/",
+  mainId = "main",
+}: HeroHeaderProps) {
   return (
     <header className="chrome hero-header">
       <a className="skip-link" href={`#${mainId}`}>

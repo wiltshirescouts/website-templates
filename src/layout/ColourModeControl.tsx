@@ -1,6 +1,6 @@
 import { Check, Monitor, Moon, Sun } from "lucide-react";
 import { useId } from "react";
-import { type ColourPreference } from "../theme/cookie";
+import type { ColourPreference } from "../theme/cookie";
 import { useTheme } from "../theme/ThemeProvider";
 
 const OPTIONS: { value: ColourPreference; label: string; Icon: typeof Sun }[] = [

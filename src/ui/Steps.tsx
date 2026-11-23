@@ -17,7 +17,11 @@ export function Steps({ steps, current }: { steps: string[]; current: number }) 
           return (
             <li key={label} className={state} aria-current={n === current ? "step" : undefined}>
               <span className="dot">
-                {state === "done" ? <Check className="icon icon-sm" aria-hidden="true" focusable="false" /> : n}
+                {state === "done" ? (
+                  <Check className="icon icon-sm" aria-hidden="true" focusable="false" />
+                ) : (
+                  n
+                )}
               </span>
               {label}
               {state === "done" && <span className="sr-only"> (complete)</span>}

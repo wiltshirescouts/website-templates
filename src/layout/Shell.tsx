@@ -19,7 +19,11 @@ export function Main({
   className?: string;
 }) {
   return (
-    <main id={id} tabIndex={-1} className={cn("page-container", narrow && "page-container-narrow", className)}>
+    <main
+      id={id}
+      tabIndex={-1}
+      className={cn("page-container", narrow && "page-container-narrow", className)}
+    >
       {children}
     </main>
   );

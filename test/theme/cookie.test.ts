@@ -21,7 +21,9 @@ describe("colour mode cookie", () => {
   it("writes the shared cookie with domain and Secure on wiltshirescouts.org.uk hosts", () => {
     const env = fakeEnv("go.wiltshirescouts.org.uk");
     writePreference("dark", env);
-    expect(env.jar[0]).toBe("ws-theme=dark; Max-Age=31536000; Path=/; SameSite=Lax; Domain=.wiltshirescouts.org.uk; Secure");
+    expect(env.jar[0]).toBe(
+      "ws-theme=dark; Max-Age=31536000; Path=/; SameSite=Lax; Domain=.wiltshirescouts.org.uk; Secure",
+    );
   });
 
   it("omits Domain and Secure elsewhere and falls back to localStorage", () => {

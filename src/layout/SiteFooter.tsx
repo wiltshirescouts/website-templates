@@ -16,8 +16,7 @@ export function SiteFooter({ madeBy, version }: SiteFooterProps) {
         <div className="footer-row">
           <div className="footer-links">
             <a href={PRIVACY_URL} target="_blank" rel="noopener">
-              Privacy policy{" "}
-              <ExternalLink className="icon icon-sm" aria-hidden="true" focusable="false" />
+              Privacy policy <ExternalLink className="icon icon-sm" aria-hidden="true" focusable="false" />
               <span className="sr-only">(opens in a new tab)</span>
             </a>
             {madeBy && <span>{madeBy}</span>}

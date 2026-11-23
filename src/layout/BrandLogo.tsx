@@ -41,7 +41,15 @@ export interface BrandLogoProps {
   className?: string;
 }
 
-export function BrandLogo({ layout = "linear", on, tone, alt = "", width, height, className }: BrandLogoProps) {
+export function BrandLogo({
+  layout = "linear",
+  on,
+  tone,
+  alt = "",
+  width,
+  height,
+  className,
+}: BrandLogoProps) {
   const size = { width, height };
   if (on === "page" && !tone) {
     return (

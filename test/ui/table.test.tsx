@@ -71,12 +71,12 @@ describe("DataTable", () => {
     const select = screen.getByLabelText("Sort by") as HTMLSelectElement;
     expect(select.value).toBe("name");
     const dir = screen.getByRole("button", {
-      name: "Sort direction: ascending. Activate to sort descending.",
+      name: "A to Z. Sort direction: ascending. Activate to sort descending.",
     });
     fireEvent.click(dir);
     expect(names()).toEqual(["Gamma", "Beta", "Alpha"]);
     expect(
-      screen.getByRole("button", { name: "Sort direction: descending. Activate to sort ascending." }),
+      screen.getByRole("button", { name: "Z to A. Sort direction: descending. Activate to sort ascending." }),
     ).toBeTruthy();
     fireEvent.change(select, { target: { value: "size" } });
     expect(screen.getByRole("status").textContent).toBe("Table sorted by Group size, descending.");

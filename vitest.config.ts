@@ -1,4 +1,8 @@
 import { defineConfig } from "vitest/config";
 export default defineConfig({
-  test: { include: ["test/**/*.test.{ts,tsx}"], environment: "node", environmentMatchGlobs: [["test/ui/**", "jsdom"]] } as never,
+  test: {
+    include: ["test/**/*.test.{ts,tsx}"],
+    environment: "node",
+    environmentMatchGlobs: [["test/ui/**", "jsdom"]],
+  } as never,
 });

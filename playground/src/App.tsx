@@ -12,7 +12,6 @@ const pages = {
   emails: lazy(() => import("./pages/Emails")),
   "emails-brevo-not-set-up": lazy(() => import("./pages/EmailsBrevoOff")),
   "email-edit": lazy(() => import("./pages/EmailEdit")),
-  "component-sheet": lazy(() => import("./pages/ComponentSheet")),
 } as const;
 
 export function App() {

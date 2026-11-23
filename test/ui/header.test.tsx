@@ -5,7 +5,12 @@ import { afterEach, beforeAll, describe, expect, it } from "vitest";
 import { SiteFooter, SiteHeader, ThemeProvider } from "../../src";
 
 beforeAll(() => {
-  window.matchMedia ??= ((q: string) => ({ matches: false, media: q, addEventListener() {}, removeEventListener() {} })) as never;
+  window.matchMedia ??= ((q: string) => ({
+    matches: false,
+    media: q,
+    addEventListener() {},
+    removeEventListener() {},
+  })) as never;
 });
 afterEach(() => {
   cleanup();
@@ -18,7 +23,9 @@ const wrap = (ui: React.ReactNode) => render(<ThemeProvider>{ui}</ThemeProvider>
 describe("SiteHeader", () => {
   it("rejects a title over 60 characters at runtime in development", () => {
     const long = "x".repeat(61);
-    expect(() => wrap(<SiteHeader title={long} account={{ variant: "colour-only" }} />)).toThrow(/maximum is 60/);
+    expect(() => wrap(<SiteHeader title={long} account={{ variant: "colour-only" }} />)).toThrow(
+      /maximum is 60/,
+    );
   });
 
   it("has no menu button when there is no nav", () => {
@@ -27,7 +34,13 @@ describe("SiteHeader", () => {
   });
 
   it("has a skip link and a labelled nav", () => {
-    wrap(<SiteHeader title="Site" nav={[{ label: "Home", href: "/", icon: Home, current: true }]} account={{ variant: "colour-only" }} />);
+    wrap(
+      <SiteHeader
+        title="Site"
+        nav={[{ label: "Home", href: "/", icon: Home, current: true }]}
+        account={{ variant: "colour-only" }}
+      />,
+    );
     expect(screen.getByRole("link", { name: "Skip to content" }).getAttribute("href")).toBe("#main");
     expect(screen.getByRole("link", { name: "Home" }).getAttribute("aria-current")).toBe("page");
   });
@@ -52,7 +65,19 @@ describe("AccountMenu", () => {
   });
 
   it("signed-in variant shows name, email, role and sign out", () => {
-    wrap(<SiteHeader title="Site" account={{ variant: "signed-in", name: "Alex Example", email: "alex@example.org", role: "Registrar", profileHref: "/me", signOutHref: "/out" }} />);
+    wrap(
+      <SiteHeader
+        title="Site"
+        account={{
+          variant: "signed-in",
+          name: "Alex Example",
+          email: "alex@example.org",
+          role: "Registrar",
+          profileHref: "/me",
+          signOutHref: "/out",
+        }}
+      />,
+    );
     expect(screen.getByText("alex@example.org")).toBeTruthy();
     expect(screen.getByText("Registrar")).toBeTruthy();
     expect(screen.getByRole("link", { name: "Sign out" }).getAttribute("href")).toBe("/out");
@@ -72,7 +97,9 @@ describe("AccountMenu", () => {
 describe("SiteFooter", () => {
   it("links to the privacy policy and shows the sign-off", () => {
     render(<SiteFooter version="v1.2.3" />);
-    expect(screen.getByRole("link", { name: /Privacy policy/ }).getAttribute("href")).toBe("https://www.wiltshirescouts.org.uk/who-we-are/data-protection/");
+    expect(screen.getByRole("link", { name: /Privacy policy/ }).getAttribute("href")).toBe(
+      "https://www.wiltshirescouts.org.uk/who-we-are/data-protection/",
+    );
     expect(screen.getByText("#PlaceToBelong")).toBeTruthy();
     expect(screen.getByText("v1.2.3")).toBeTruthy();
   });

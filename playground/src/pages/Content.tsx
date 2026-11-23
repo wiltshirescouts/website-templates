@@ -1,4 +1,4 @@
-import { Alert, ButtonLink, Breadcrumb, Card, CardBody, Eyebrow } from "@wiltshirescouts/theme";
+import { Alert, Breadcrumb, ButtonLink, Card, CardBody, Eyebrow } from "@wiltshirescouts/theme";
 import { CalendarDays, ChevronRight, Mail, PlaneTakeoff, UserPlus, Users } from "lucide-react";
 import { publicNav, Site, signedOut } from "../site";
 
@@ -11,14 +11,24 @@ const links = ["Costs and payments", "Kit list", "Safeguarding on trips", "Frequ
 
 export default function Content() {
   return (
-    <Site title="Wiltshire Scouts International Trips and Jamboree Info" nav={publicNav("Trips")} account={signedOut}>
-      <Breadcrumb items={[{ label: "Home", href: "#" }, { label: "Trips", href: "#" }, { label: "Jamboree Alternative" }]} />
+    <Site
+      title="Wiltshire Scouts International Trips and Jamboree Info"
+      nav={publicNav("Trips")}
+      account={signedOut}
+    >
+      <Breadcrumb
+        items={[
+          { label: "Home", href: "#" },
+          { label: "Trips", href: "#" },
+          { label: "Jamboree Alternative" },
+        ]}
+      />
       <section className="hero" aria-labelledby="page-title">
         <div>
           <h1 id="page-title">Jamboree Alternative 2027</h1>
           <p>
-            A two-week international adventure for Scouts, Explorers and volunteers from across Wiltshire. Read how
-            it works, then sign up in about five minutes.
+            A two-week international adventure for Scouts, Explorers and volunteers from across Wiltshire.
+            Read how it works, then sign up in about five minutes.
           </p>
         </div>
         <div className="hero__actions">
@@ -36,8 +46,8 @@ export default function Content() {
         <article className="prose">
           <h2 style={{ marginTop: 0 }}>Who can take part</h2>
           <p>
-            The trip is open to Scouts and Explorers aged 14 to 17 on 1 August 2027, and to adult volunteers who are
-            at least 18. You do not need to have been abroad with Scouts before.
+            The trip is open to Scouts and Explorers aged 14 to 17 on 1 August 2027, and to adult volunteers
+            who are at least 18. You do not need to have been abroad with Scouts before.
           </p>
           <ul>
             <li>Young people need a parent or carer’s consent.</li>
@@ -46,14 +56,14 @@ export default function Content() {
           </ul>
           <Alert kind="info" title="Deposit">
             <p>
-              A £150 deposit secures a place. The trip team send payment details separately. No payment is taken
-              through this website.
+              A £150 deposit secures a place. The trip team send payment details separately. No payment is
+              taken through this website.
             </p>
           </Alert>
           <h2>How places are decided</h2>
           <p>
-            The trip team review every sign-up and build a balanced group. You will hear the outcome by email within
-            two weeks of the closing date. Your place is provisional until the trip team confirm it.
+            The trip team review every sign-up and build a balanced group. You will hear the outcome by email
+            within two weeks of the closing date. Your place is provisional until the trip team confirm it.
           </p>
           <h3>Key dates</h3>
           <div className="card-grid" style={{ marginTop: ".5rem" }}>

@@ -10,7 +10,9 @@ test("sorting updates aria-sort, hidden state text and the live region", async (
   await page.getByRole("button", { name: /^Name/ }).click();
   await expect(name).toHaveAttribute("aria-sort", "descending");
   await expect(status).toContainText("descending");
-  await expect(page.getByRole("button", { name: /^Name/ })).toContainText("sorted descending. Activate to sort ascending");
+  await expect(page.getByRole("button", { name: /^Name/ })).toContainText(
+    "sorted descending. Activate to sort ascending",
+  );
 });
 
 test("below 640px rows become cards with a Sort by select and direction button", async ({ page }) => {

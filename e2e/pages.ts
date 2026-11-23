@@ -9,5 +9,4 @@ export const ROUTES = [
   "emails",
   "emails-brevo-not-set-up",
   "email-edit",
-  "component-sheet",
 ] as const;

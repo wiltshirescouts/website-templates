@@ -1,4 +1,4 @@
-import { ThemeProvider, type ColourPreference } from "@wiltshirescouts/theme";
+import { type ColourPreference, ThemeProvider } from "@wiltshirescouts/theme";
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";

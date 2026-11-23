@@ -1,4 +1,11 @@
-import { type AccountConfig, Main, type NavItem, PageShell, SiteFooter, SiteHeader } from "@wiltshirescouts/theme";
+import {
+  type AccountConfig,
+  Main,
+  type NavItem,
+  PageShell,
+  SiteFooter,
+  SiteHeader,
+} from "@wiltshirescouts/theme";
 import { Home, Mail, PlaneTakeoff, PoundSterling } from "lucide-react";
 import type { ReactNode } from "react";
 
@@ -39,7 +46,14 @@ export function Site({
     <PageShell>
       <SiteHeader title={title} nav={nav} account={account} />
       <Main className={mainClassName}>{children}</Main>
-      <SiteFooter madeBy={<>Made by <a href="#">Wiltshire Scouts Digital</a></>} version="v1.0.0" />
+      <SiteFooter
+        madeBy={
+          <>
+            Made by <a href="#">Wiltshire Scouts Digital</a>
+          </>
+        }
+        version="v1.0.0"
+      />
     </PageShell>
   );
 }

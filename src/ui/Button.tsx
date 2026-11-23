@@ -29,7 +29,13 @@ export function Button({
   type = "button",
   ...props
 }: ButtonHTMLAttributes<HTMLButtonElement> & ButtonStyleProps) {
-  return <button type={type} className={cn(buttonVariants({ variant, size, blockOnMobile }), className)} {...props} />;
+  return (
+    <button
+      type={type}
+      className={cn(buttonVariants({ variant, size, blockOnMobile }), className)}
+      {...props}
+    />
+  );
 }
 
 /** A link that looks like a button. */

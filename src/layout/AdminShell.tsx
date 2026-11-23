@@ -1,6 +1,6 @@
 import type { LucideIcon } from "lucide-react";
 import { ChevronDown, Settings } from "lucide-react";
-import type { ReactNode } from "react";
+import { Fragment, type ReactNode } from "react";
 
 export interface SubNavSection {
   heading?: string;
@@ -11,7 +11,7 @@ function Lists({ sections }: { sections: SubNavSection[] }) {
   return (
     <>
       {sections.map((s) => (
-        <div key={s.heading ?? "main"}>
+        <Fragment key={s.heading ?? "main"}>
           {s.heading && <h2>{s.heading}</h2>}
           <ul>
             {s.items.map(({ label, href, icon: Icon, current }) => (
@@ -23,7 +23,7 @@ function Lists({ sections }: { sections: SubNavSection[] }) {
               </li>
             ))}
           </ul>
-        </div>
+        </Fragment>
       ))}
     </>
   );
