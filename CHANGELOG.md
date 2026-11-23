@@ -1,5 +1,10 @@
 # Changelog
 
+## Unreleased
+
+- `DataTable` sorts natively and no longer depends on `@tanstack/react-table` (version 9 is a full API rewrite, and only sort state was used). Behaviour and props are unchanged.
+- Dev: jsdom 31; GitHub Actions checkout, setup-node and upload-artifact v7.
+
 ## 0.2.0 (2026-11-23)
 
 - Header: 9px clear space around the logo, so the header is 80px tall and matches the PNG logo used by other sites.

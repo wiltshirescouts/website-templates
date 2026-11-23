@@ -1,11 +1,3 @@
-import {
-  type ColumnDef,
-  getCoreRowModel,
-  getSortedRowModel,
-  type Row,
-  type SortingFn,
-  useReactTable,
-} from "@tanstack/react-table";
 import { ArrowDown, ArrowUp, ArrowUpDown } from "lucide-react";
 import { type ReactNode, useId, useMemo, useState } from "react";
 import { cn } from "../lib/cn";
@@ -62,12 +54,13 @@ const opposite = (d: SortDirection): SortDirection => (d === "ascending" ? "desc
 
 const toNumber = (v: unknown) => (v instanceof Date ? v.getTime() : Number(v));
 
-const textSort: SortingFn<unknown> = (a, b, id) =>
-  String(a.getValue(id) ?? "").localeCompare(String(b.getValue(id) ?? ""), "en-GB", {
-    numeric: true,
-    sensitivity: "base",
-  });
-const numberSort: SortingFn<unknown> = (a, b, id) => toNumber(a.getValue(id)) - toNumber(b.getValue(id));
+const textSort = (a: unknown, b: unknown) =>
+  String(a ?? "").localeCompare(String(b ?? ""), "en-GB", { numeric: true, sensitivity: "base" });
+const numberSort = (a: unknown, b: unknown) => toNumber(a) - toNumber(b);
+
+function readValue<T>(c: DataTableColumn<T>, row: T): unknown {
+  return typeof c.accessor === "function" ? c.accessor(row) : (row[c.accessor] as unknown);
+}
 
 function colId<T>(c: DataTableColumn<T>, i: number) {
   return c.id ?? (typeof c.accessor === "string" ? c.accessor : `col-${i}`);
@@ -96,31 +89,16 @@ export function DataTable<T>({
   const [announce, setAnnounce] = useState("");
   const sort = sortProp !== undefined ? sortProp : inner;
 
-  // Stable column definitions: new ones on every render make TanStack Table reset its state in a loop.
-  const defs: ColumnDef<T>[] = useMemo(
-    () =>
-      columns.map((c, i) => ({
-        id: colId(c, i),
-        header: c.header,
-        accessorFn: (row: T) =>
-          typeof c.accessor === "function" ? c.accessor(row) : (row[c.accessor] as unknown),
-        sortingFn: (c.type === "number" ? numberSort : textSort) as unknown as SortingFn<T>,
-        enableSorting: c.sortable !== false,
-      })),
-    [columns],
-  );
-
-  const table = useReactTable({
-    data,
-    columns: defs,
-    state: { sorting: sort ? [{ id: sort.id, desc: sort.direction === "descending" }] : [] },
-    getRowId: getRowId ? (row, i) => getRowId(row, i) : undefined,
-    getCoreRowModel: getCoreRowModel(),
-    getSortedRowModel: getSortedRowModel(),
-    enableSortingRemoval: false,
-    enableMultiSort: false,
-    autoResetPageIndex: false,
-  });
+  // Rows in sorted order. Array.prototype.sort is stable, so equal rows keep their original order.
+  const rows = useMemo(() => {
+    const all = data.map((original, i) => ({ id: getRowId ? getRowId(original, i) : String(i), original }));
+    const idx = sort ? columns.findIndex((c, i) => colId(c, i) === sort.id) : -1;
+    const col = columns[idx];
+    if (!sort || !col) return all;
+    const cmp = col.type === "number" ? numberSort : textSort;
+    const mult = sort.direction === "ascending" ? 1 : -1;
+    return [...all].sort((a, b) => mult * cmp(readValue(col, a.original), readValue(col, b.original)));
+  }, [data, columns, sort, getRowId]);
 
   const label = (id: string) => columns.find((c, i) => colId(c, i) === id)?.header ?? id;
 
@@ -137,7 +115,6 @@ export function DataTable<T>({
     0,
     columns.findIndex((c) => c.rowHeader),
   );
-  const rows: Row<T>[] = table.getRowModel().rows;
   const dir = sort?.direction ?? "ascending";
   const selectId = `${uid}-sort-select`;
 
@@ -243,7 +220,7 @@ export function DataTable<T>({
             {rows.map((r) => (
               <tr key={r.id}>
                 {columns.map((c, i) => {
-                  const content = c.cell ? c.cell(r.original) : (r.getValue(colId(c, i)) as ReactNode);
+                  const content = c.cell ? c.cell(r.original) : (readValue(c, r.original) as ReactNode);
                   const cls = c.numeric ? "num" : undefined;
                   return i === rowHeaderIndex ? (
                     <th key={colId(c, i)} scope="row" className={cls}>
