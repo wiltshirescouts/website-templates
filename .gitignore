@@ -1,0 +1,11 @@
+node_modules
+dist
+.DS_Store
+design/_tmp/
+design/theme-mockups/standalone/
+playwright-report
+test-results
+.env
+.env.*
+!.env.example
+*.tsbuildinfo
