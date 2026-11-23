@@ -58,6 +58,10 @@ const textSort = (a: unknown, b: unknown) =>
   String(a ?? "").localeCompare(String(b ?? ""), "en-GB", { numeric: true, sensitivity: "base" });
 const numberSort = (a: unknown, b: unknown) => toNumber(a) - toNumber(b);
 
+function readValue<T>(c: DataTableColumn<T>, row: T): unknown {
+  return typeof c.accessor === "function" ? c.accessor(row) : (row[c.accessor] as unknown);
+}
+
 function colId<T>(c: DataTableColumn<T>, i: number) {
   return c.id ?? (typeof c.accessor === "string" ? c.accessor : `col-${i}`);
 }
@@ -85,9 +89,6 @@ export function DataTable<T>({
   const [announce, setAnnounce] = useState("");
   const sort = sortProp !== undefined ? sortProp : inner;
 
-  const valueOf = (c: DataTableColumn<T>, row: T): unknown =>
-    typeof c.accessor === "function" ? c.accessor(row) : (row[c.accessor] as unknown);
-
   // Rows in sorted order. Array.prototype.sort is stable, so equal rows keep their original order.
   const rows = useMemo(() => {
     const all = data.map((original, i) => ({ id: getRowId ? getRowId(original, i) : String(i), original }));
@@ -96,8 +97,7 @@ export function DataTable<T>({
     if (!sort || !col) return all;
     const cmp = col.type === "number" ? numberSort : textSort;
     const mult = sort.direction === "ascending" ? 1 : -1;
-    return [...all].sort((a, b) => mult * cmp(valueOf(col, a.original), valueOf(col, b.original)));
-    // biome-ignore lint/correctness/useExhaustiveDependencies: valueOf only reads its arguments
+    return [...all].sort((a, b) => mult * cmp(readValue(col, a.original), readValue(col, b.original)));
   }, [data, columns, sort, getRowId]);
 
   const label = (id: string) => columns.find((c, i) => colId(c, i) === id)?.header ?? id;
@@ -220,7 +220,7 @@ export function DataTable<T>({
             {rows.map((r) => (
               <tr key={r.id}>
                 {columns.map((c, i) => {
-                  const content = c.cell ? c.cell(r.original) : (valueOf(c, r.original) as ReactNode);
+                  const content = c.cell ? c.cell(r.original) : (readValue(c, r.original) as ReactNode);
                   const cls = c.numeric ? "num" : undefined;
                   return i === rowHeaderIndex ? (
                     <th key={colId(c, i)} scope="row" className={cls}>
