@@ -143,7 +143,7 @@ export function DataTable<T>({
 
   return (
     <>
-      {toolbar}
+      {toolbar && <div className="data-table-toolbar">{toolbar}</div>}
       {!scroll && sortable.length > 0 && (
         <div className="mobile-sort">
           <div className="field">

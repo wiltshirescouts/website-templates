@@ -23,6 +23,10 @@
     margin-left: -0.5rem;
     border-radius: var(--radius);
   }
+  /* The supplied PNGs used by the other sites include clear space (80px tall at 176px wide); the cropped SVG does not, so add it. */
+  .site-header__bar .brand {
+    padding-block: 0.5625rem;
+  }
   .brand img {
     display: block;
     height: auto;
@@ -2257,6 +2261,46 @@
   }
   /* A heading straight above a field or row of fields */
   :where(form, .card__body, .stack) > :where(h2, h3) + :where(.field, .row-2) {
+
+    margin-top: 0.75rem;
+  }
+}
+
+@layer components {
+  /* A card heading followed straight by buttons (or a row of them) needs room. Headings followed by text keep their
+     tighter spacing, and flex card bodies (trip and sign-up cards) already space children with gap. */
+  .card__body > :is(h2, h3):has(+ .btn, + .btn-row, + .page-header__actions, + div:not(.field, .row-2)) {
+    margin-bottom: 0.75rem;
+  }
+  .trip-card .card__body > :is(h2, h3),
+  .signup-card .card__body > :is(h2, h3) {
+    margin-bottom: 0;
+  }
+}
+}
+
+@layer components {
+  /* DataTable toolbar slot. Whatever row of controls a site puts in it, fields sit on one line, level with each other:
+     the stacked-form bottom margin on .field is removed here. */
+  .data-table-toolbar .field {
+    margin: 0;
+    flex: 1 1 14rem;
+  }
+  .data-table-toolbar .field.small {
+    flex: 0 1 12rem;
+  }
+  .data-table-toolbar .search {
+    flex: 2 1 20rem;
+  }
+  .data-table-toolbar > .toolbar,
+  .data-table-toolbar > div {
+    margin-bottom: 1rem;
+  }
+  /* A heading straight above the toolbar or the table needs room */
+  :is(h1, h2, h3, h4) + .data-table-toolbar,
+  :is(h1, h2, h3, h4) + .table-wrap,
+  :is(h1, h2, h3, h4) + .mobile-sort {
+
     margin-top: 0.75rem;
   }
 }

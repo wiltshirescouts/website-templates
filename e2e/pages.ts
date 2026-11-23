@@ -2,6 +2,7 @@ export const ROUTES = [
   "content",
   "form",
   "table",
+  "table-toolbar",
   "library",
   "info",
   "sign-in",
