@@ -81,11 +81,11 @@ export default function EmailEdit() {
   const [subject, setSubject] = useState("Thanks for volunteering");
   const [body, setBody] = useState(DEFAULT_BODY);
   const [sent, setSent] = useState(true);
-  const ref = useRef<HTMLDivElement>(null);
+  const ref = useRef<HTMLTextAreaElement>(null);
   const dirty = body !== DEFAULT_BODY || subject !== "Thanks for volunteering";
 
   const insert = (token: string) => {
-    const el = ref.current?.querySelector("textarea");
+    const el = ref.current;
     const at = el?.selectionStart ?? body.length;
     const end = el?.selectionEnd ?? at;
     setBody(body.slice(0, at) + token + body.slice(end));
@@ -124,13 +124,13 @@ export default function EmailEdit() {
             <Input value={subject} onChange={(e) => setSubject(e.target.value)} />
           </Field>
           <PlaceholderChips placeholders={PLACEHOLDERS} onInsert={insert} />
-          <div ref={ref} style={{ display: "contents" }}>
+          <div style={{ display: "contents" }}>
             <Field
               label="Email text"
               required
               hint="Plain text. Leave a blank line between paragraphs. Web addresses become links."
             >
-              <Textarea mono value={body} onChange={(e) => setBody(e.target.value)} />
+              <Textarea ref={ref} mono value={body} onChange={(e) => setBody(e.target.value)} />
             </Field>
           </div>
           {sent && (

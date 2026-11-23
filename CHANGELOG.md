@@ -8,6 +8,6 @@ First version of the shared theme.
 - `ThemeProvider`, no-flash script and shared `ws-theme` cookie (localStorage fallback off-domain).
 - Layout: `SiteHeader`, `HeroHeader`, `SiteFooter`, `AccountMenu` (three variants), `ColourModeControl`, `AdminShell`.
 - Page pieces, form components, sortable `DataTable`, library, information panel, email editor pieces.
-- Microsoft sign-in button, sign-in and "account not allowed" states.
+- Microsoft sign-in button, sign-in and "account not allowed" states (default wording: "work or school account").
 - Server entry point: Entra ID OIDC (PKCE, JWKS validation, sessions, safe `next`) and a Brevo client with `renderEmail`.
 - Playground app, unit tests, Playwright and axe tests, CI, Dependabot.

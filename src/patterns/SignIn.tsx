@@ -61,7 +61,7 @@ export interface SignInCardProps {
   title?: string;
   signInHref: string;
   buttonLabel?: string;
-  /** Shown instead of the lede's account wording, for example "Wiltshire Scouts Microsoft 365 account". */
+  /** Shown instead of the lede's account wording, for example "Wiltshire Scouts work or school account". */
   accountLabel?: string;
   /** For the account-not-allowed state: rendered between the lede and the button. */
   error?: ReactNode;
@@ -77,7 +77,7 @@ export function SignInCard({
   title = "Sign in",
   signInHref,
   buttonLabel,
-  accountLabel = "Wiltshire Scouts Microsoft 365 account",
+  accountLabel = "Wiltshire Scouts work or school account",
   error,
   contactEmail,
   passwordNote = "Microsoft handles your password and any two-step check. This site never sees or stores your password.",
@@ -139,7 +139,7 @@ export function SignInNotAllowed({
   heading = "That account cannot sign in",
   message,
   buttonLabel = "Try a different Microsoft account",
-  lede = "Use your Wiltshire Scouts Microsoft 365 account.",
+  lede = "Use your Wiltshire Scouts work or school account.",
   ...rest
 }: SignInNotAllowedProps) {
   return (
@@ -151,7 +151,7 @@ export function SignInNotAllowed({
         <Alert kind="error" role="alert" title={heading} headingLevel={2}>
           <p>
             {message ??
-              `${account ?? "That account"} is not a Wiltshire Scouts Microsoft 365 account, or has not been given access to this site. Try a different account, or ask the digital team for access.`}
+              `${account ?? "That account"} is not a Wiltshire Scouts work or school account, or has not been given access to this site. Try a different account, or ask the digital team for access.`}
           </p>
         </Alert>
       }

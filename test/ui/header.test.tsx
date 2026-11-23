@@ -104,3 +104,13 @@ describe("SiteFooter", () => {
     expect(screen.getByText("v1.2.3")).toBeTruthy();
   });
 });
+
+describe("form controls", () => {
+  it("forward a ref to the native element", async () => {
+    const { createRef } = await import("react");
+    const { Textarea } = await import("../../src");
+    const ref = createRef<HTMLTextAreaElement>();
+    render(<Textarea ref={ref} aria-label="Body" />);
+    expect(ref.current).toBeInstanceOf(HTMLTextAreaElement);
+  });
+});
