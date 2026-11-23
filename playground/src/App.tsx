@@ -5,6 +5,7 @@ const pages = {
   content: lazy(() => import("./pages/Content")),
   form: lazy(() => import("./pages/Form")),
   table: lazy(() => import("./pages/Table")),
+  "table-toolbar": lazy(() => import("./pages/TableToolbar")),
   library: lazy(() => import("./pages/Library")),
   info: lazy(() => import("./pages/Info")),
   "sign-in": lazy(() => import("./pages/SignIn")),
