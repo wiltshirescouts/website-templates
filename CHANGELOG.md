@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 0.2.1 (2026-11-23)
 
 - `DataTable` sorts natively and no longer depends on `@tanstack/react-table` (version 9 is a full API rewrite, and only sort state was used). Behaviour and props are unchanged.
 - Dev: jsdom 31; GitHub Actions checkout, setup-node and upload-artifact v7.
