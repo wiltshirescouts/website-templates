@@ -1,0 +1,262 @@
+/* Consumers: @import "tailwindcss"; then this file, then fonts.css. */
+@import "./components.css";
+@source "../";
+
+/* Tokens use shadcn/ui names. The Tailwind v4 mapping below makes bg-background, text-foreground, border-border etc. work. */
+:root {
+  /* Brand palette (guidelines v3.3) - never changes with the colour mode */
+  --scout-purple: #7413dc;
+  --scout-teal: #088486;
+  --scout-navy: #003982;
+  --scout-red: #ed3f23;
+  --scout-blue: #006ddf;
+  --purple-deep: #4a0d93;
+
+  --radius: 0.5rem;
+
+  /* shadcn semantic tokens - LIGHT */
+  --background: #f6f4f9; /* pale lilac page (wsj-system surface); cards stay white */
+  --foreground: #000000;
+  --card: #ffffff;
+  --card-foreground: #000000;
+  --popover: #ffffff;
+  --popover-foreground: #000000;
+  --primary: #7413dc;
+  --primary-foreground: #ffffff;
+  --secondary: #f3ebfc; /* purple tint: secondary / selected rows */
+  --secondary-foreground: #4a0d93;
+  --muted: #efeaf5;
+  --muted-foreground: #5c5c5c; /* 6.9:1 on white (dpia-tool uses #666 = 5.7:1) */
+  --accent: #f3ebfc;
+  --accent-foreground: #4a0d93;
+  --destructive: #a3260f; /* error text, borders, destructive buttons (white text 7.6:1) */
+  --destructive-foreground: #ffffff;
+  --destructive-soft: #fdecea;
+  --border: #dcd6e6; /* decorative: cards, dividers */
+  --input: #767182; /* control boundary, 4.6:1 (dpia-tool #999 is only 2.8:1) */
+  --ring: #7413dc;
+
+  /* Extra tokens (not in stock shadcn) */
+  --link: #7413dc;
+  --success: #205b41;
+  --success-soft: #e7f2ec;
+  --warning: #7a3b00;
+  --warning-soft: #fff1e2;
+  --info: #003982;
+  --info-soft: #e6eef8;
+  --overlay: rgb(0 0 0 / 0.5);
+
+  /* Header / footer are ALWAYS brand purple with white ink, in both colour modes */
+  --chrome: #7413dc;
+  --chrome-foreground: #ffffff;
+  --chrome-hover: rgb(255 255 255 / 0.12);
+  --chrome-line: rgb(255 255 255 / 0.28);
+  --chrome-ring: #ffffff;
+
+  /* Extra non-semantic tokens */
+  --on-chrome: #ffffff;
+  --chrome-tint: #f3ebfc;
+  --primary-hover-dark: #8a33e8;
+  --ribbon: #088486;
+  --art-placeholder: #3a2a63;
+  /* Marketing emails always render light, as in a mail client */
+  --email-canvas: #f5f5f5;
+  --email-ink: #000000;
+  --email-muted: #5c5c5c;
+  --email-line: #e6e6e6;
+  /* Microsoft sign-in button (Microsoft's own button spec) */
+  --ms-bg: #ffffff;
+  --ms-fg: #5e5e5e;
+  --ms-border: #8c8c8c;
+  --ms-hover: #f2f2f2;
+
+  --font-sans: "Nunito Sans", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Arial, sans-serif;
+  color-scheme: light;
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --background: #121018;
+  --foreground: #f3f0f8;
+  --card: #1c1925;
+  --card-foreground: #f3f0f8;
+  --popover: #1c1925;
+  --popover-foreground: #f3f0f8;
+  --primary: #7413dc; /* buttons keep brand purple with white text (6.3:1) */
+  --primary-foreground: #ffffff;
+  --secondary: #2b1c47;
+  --secondary-foreground: #e4d4ff;
+  --muted: #25212f;
+  --muted-foreground: #b8b2c2;
+  --accent: #2b1c47;
+  --accent-foreground: #e4d4ff;
+  --destructive: #ff9f8e; /* lightened so it works as TEXT on dark; buttons then use dark ink */
+  --destructive-foreground: #3b1511;
+  --destructive-soft: #3b1511;
+  --border: #3b3648;
+  --input: #918ba0;
+  --ring: #d2b0ff;
+  --link: #d2b0ff;
+  --success: #84dfae;
+  --success-soft: #10301f;
+  --warning: #ffc78e;
+  --warning-soft: #392410;
+  --info: #a3c8ff;
+  --info-soft: #10294a;
+  --overlay: rgb(0 0 0 / 0.65);
+  --ms-bg: #2f2f2f;
+  --ms-fg: #ffffff;
+  --ms-border: #2f2f2f;
+  --ms-hover: #3b3b3b;
+  /* chrome tokens deliberately unchanged */
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-link: var(--link);
+  --color-success: var(--success);
+  --color-warning: var(--warning);
+  --color-info: var(--info);
+  --color-chrome: var(--chrome);
+  --color-chrome-foreground: var(--chrome-foreground);
+  --color-ribbon: var(--ribbon);
+  --radius-lg: var(--radius);
+}
+
+@layer base {
+  /* ------------------------------------------------------------------ base */
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+    border-color: var(--border);
+  }
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
+  body {
+    margin: 0;
+    font-family: var(--font-sans);
+    font-size: 1rem;
+    line-height: 1.6;
+    background: var(--background);
+    color: var(--foreground);
+    -webkit-font-smoothing: antialiased;
+  }
+  h1,
+  h2 {
+    font-weight: 900;
+    line-height: 1.15;
+    margin: 0;
+  }
+  h3,
+  h4 {
+    font-weight: 800;
+    line-height: 1.3;
+    margin: 0;
+  }
+  p {
+    margin: 0 0 0.75rem;
+  }
+  a {
+    color: var(--link);
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+  }
+  ul,
+  ol {
+    list-style: revert;
+  }
+  a:hover {
+    text-decoration-thickness: 2px;
+  }
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+    border: 0;
+  }
+  .icon {
+    display: inline-block;
+    width: 1em;
+    height: 1em;
+    flex: none;
+    stroke: currentColor;
+    fill: none;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    vertical-align: -0.125em;
+  }
+  .icon-sm {
+    width: 1rem;
+    height: 1rem;
+  }
+  .icon-md {
+    width: 1.25rem;
+    height: 1.25rem;
+  }
+  .icon-lg {
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+  .page-container {
+    width: 100%;
+    max-width: 72rem;
+    margin-inline: auto;
+    padding-inline: 1rem;
+  } /* max-w-6xl px-4 */
+  .page-container-narrow {
+    max-width: 48rem;
+  } /* max-w-3xl */
+
+  /* Keyboard focus: one rule everywhere. 3px ring + 2px offset; white on purple chrome.
+     .is-focus lets the mockups show the state without a real keyboard. */
+  :focus-visible,
+  .is-focus {
+    outline: 3px solid var(--ring);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+  .chrome :focus-visible,
+  .chrome .is-focus {
+    outline-color: var(--chrome-ring);
+  }
+  .skip-link {
+    position: absolute;
+    left: 0.5rem;
+    top: -4rem;
+    z-index: 100;
+    background: var(--card);
+    color: var(--foreground);
+    font-weight: 700;
+    padding: 0.75rem 1rem;
+    border-radius: var(--radius);
+  }
+  .skip-link:focus {
+    top: 0.5rem;
+  }
+}

@@ -1,0 +1,426 @@
+{
+ "light": [
+  {
+   "n": "Body text",
+   "fg": "#000000",
+   "bg": "#f6f4f9",
+   "min": 4.5,
+   "r": 19.2267501304248
+  },
+  {
+   "n": "Body text on card",
+   "fg": "#000000",
+   "bg": "#ffffff",
+   "min": 4.5,
+   "r": 21
+  },
+  {
+   "n": "Muted text (hints, captions) on page",
+   "fg": "#5c5c5c",
+   "bg": "#f6f4f9",
+   "min": 4.5,
+   "r": 6.122267922920181
+  },
+  {
+   "n": "Muted text on card",
+   "fg": "#5c5c5c",
+   "bg": "#ffffff",
+   "min": 4.5,
+   "r": 6.686914091522715
+  },
+  {
+   "n": "Muted text on table header",
+   "fg": "#5c5c5c",
+   "bg": "#efeaf5",
+   "min": 4.5,
+   "r": 5.65451389600252
+  },
+  {
+   "n": "Link text on page",
+   "fg": "#7413dc",
+   "bg": "#f6f4f9",
+   "min": 4.5,
+   "r": 6.701057996230455
+  },
+  {
+   "n": "Link text on card",
+   "fg": "#7413dc",
+   "bg": "#ffffff",
+   "min": 4.5,
+   "r": 7.319084971003906
+  },
+  {
+   "n": "Link text on tinted row / selected",
+   "fg": "#7413dc",
+   "bg": "#f3ebfc",
+   "min": 4.5,
+   "r": 6.308327912826392
+  },
+  {
+   "n": "Primary button text",
+   "fg": "#ffffff",
+   "bg": "#7413dc",
+   "min": 4.5,
+   "r": 7.319084971003906
+  },
+  {
+   "n": "Primary button hover text",
+   "fg": "#ffffff",
+   "bg": "#4a0d93",
+   "min": 4.5,
+   "r": 11.864034445054513
+  },
+  {
+   "n": "Selected choice / sorted heading text",
+   "fg": "#4a0d93",
+   "bg": "#f3ebfc",
+   "min": 4.5,
+   "r": 10.225625190167124
+  },
+  {
+   "n": "Error text on page",
+   "fg": "#a3260f",
+   "bg": "#f6f4f9",
+   "min": 4.5,
+   "r": 6.7665294887733465
+  },
+  {
+   "n": "Error text on card",
+   "fg": "#a3260f",
+   "bg": "#ffffff",
+   "min": 4.5,
+   "r": 7.390594785927077
+  },
+  {
+   "n": "Error text on error banner",
+   "fg": "#a3260f",
+   "bg": "#fdecea",
+   "min": 4.5,
+   "r": 6.462481440899606
+  },
+  {
+   "n": "Destructive button text",
+   "fg": "#ffffff",
+   "bg": "#a3260f",
+   "min": 4.5,
+   "r": 7.390594785927077
+  },
+  {
+   "n": "Success chip text",
+   "fg": "#205b41",
+   "bg": "#e7f2ec",
+   "min": 4.5,
+   "r": 6.950877161894296
+  },
+  {
+   "n": "Warning chip text",
+   "fg": "#7a3b00",
+   "bg": "#fff1e2",
+   "min": 4.5,
+   "r": 7.717707964693819
+  },
+  {
+   "n": "Info alert icon on info background",
+   "fg": "#003982",
+   "bg": "#e6eef8",
+   "min": 3,
+   "r": 9.409702870589038
+  },
+  {
+   "n": "Form control border vs page (1.4.11)",
+   "fg": "#767182",
+   "bg": "#f6f4f9",
+   "min": 3,
+   "r": 4.316057101205636
+  },
+  {
+   "n": "Form control border vs card (1.4.11)",
+   "fg": "#767182",
+   "bg": "#ffffff",
+   "min": 3,
+   "r": 4.714119573535841
+  },
+  {
+   "n": "Focus ring vs page (1.4.11)",
+   "fg": "#7413dc",
+   "bg": "#f6f4f9",
+   "min": 3,
+   "r": 6.701057996230455
+  },
+  {
+   "n": "Focus ring vs card (1.4.11)",
+   "fg": "#7413dc",
+   "bg": "#ffffff",
+   "min": 3,
+   "r": 7.319084971003906
+  },
+  {
+   "n": "Header/footer text (white on purple)",
+   "fg": "#ffffff",
+   "bg": "#7413dc",
+   "min": 4.5,
+   "r": 7.319084971003906
+  },
+  {
+   "n": "Footer hint text (white 85% on purple)",
+   "fg": "#eadcfa",
+   "bg": "#7413dc",
+   "min": 4.5,
+   "r": 5.616941276553902
+  },
+  {
+   "n": "Focus ring on header/footer (white vs purple)",
+   "fg": "#ffffff",
+   "bg": "#7413dc",
+   "min": 3,
+   "r": 7.319084971003906
+  },
+  {
+   "n": "Colour mode: selected label (white on purple thumb)",
+   "fg": "#ffffff",
+   "bg": "#7413dc",
+   "min": 4.5,
+   "r": 7.319084971003906
+  },
+  {
+   "n": "Colour mode: unselected label on track",
+   "fg": "#000000",
+   "bg": "#efeaf5",
+   "min": 4.5,
+   "r": 17.757786355680977
+  },
+  {
+   "n": "Account button open: purple on white",
+   "fg": "#4a0d93",
+   "bg": "#ffffff",
+   "min": 4.5,
+   "r": 11.864034445054513
+  },
+  {
+   "n": "Purple header vs page edge (1.4.11 not required, info)",
+   "fg": "#7413dc",
+   "bg": "#f6f4f9",
+   "min": 1,
+   "r": 6.701057996230455
+  },
+  {
+   "n": "Card border vs page (decorative, info)",
+   "fg": "#dcd6e6",
+   "bg": "#f6f4f9",
+   "min": 1,
+   "r": 1.2987195184032736
+  }
+ ],
+ "dark": [
+  {
+   "n": "Body text",
+   "fg": "#f3f0f8",
+   "bg": "#121018",
+   "min": 4.5,
+   "r": 16.73854958192134
+  },
+  {
+   "n": "Body text on card",
+   "fg": "#f3f0f8",
+   "bg": "#1c1925",
+   "min": 4.5,
+   "r": 15.331900833430227
+  },
+  {
+   "n": "Muted text (hints, captions) on page",
+   "fg": "#b8b2c2",
+   "bg": "#121018",
+   "min": 4.5,
+   "r": 9.150944397638382
+  },
+  {
+   "n": "Muted text on card",
+   "fg": "#b8b2c2",
+   "bg": "#1c1925",
+   "min": 4.5,
+   "r": 8.381931262930907
+  },
+  {
+   "n": "Muted text on table header",
+   "fg": "#b8b2c2",
+   "bg": "#25212f",
+   "min": 4.5,
+   "r": 7.616537606419277
+  },
+  {
+   "n": "Link text on page",
+   "fg": "#d2b0ff",
+   "bg": "#121018",
+   "min": 4.5,
+   "r": 10.237375379947277
+  },
+  {
+   "n": "Link text on card",
+   "fg": "#d2b0ff",
+   "bg": "#1c1925",
+   "min": 4.5,
+   "r": 9.377062412234121
+  },
+  {
+   "n": "Link text on tinted row / selected",
+   "fg": "#d2b0ff",
+   "bg": "#2b1c47",
+   "min": 4.5,
+   "r": 8.37947392937617
+  },
+  {
+   "n": "Primary button text",
+   "fg": "#ffffff",
+   "bg": "#7413dc",
+   "min": 4.5,
+   "r": 7.319084971003906
+  },
+  {
+   "n": "Primary button hover text",
+   "fg": "#ffffff",
+   "bg": "#8a33e8",
+   "min": 4.5,
+   "r": 5.646034989651152
+  },
+  {
+   "n": "Selected choice / sorted heading text",
+   "fg": "#e4d4ff",
+   "bg": "#2b1c47",
+   "min": 4.5,
+   "r": 11.14878622912397
+  },
+  {
+   "n": "Error text on page",
+   "fg": "#ff9f8e",
+   "bg": "#121018",
+   "min": 4.5,
+   "r": 9.525255583900902
+  },
+  {
+   "n": "Error text on card",
+   "fg": "#ff9f8e",
+   "bg": "#1c1925",
+   "min": 4.5,
+   "r": 8.724786655540251
+  },
+  {
+   "n": "Error text on error banner",
+   "fg": "#ff9f8e",
+   "bg": "#3b1511",
+   "min": 4.5,
+   "r": 8.1469891423631
+  },
+  {
+   "n": "Destructive button text",
+   "fg": "#3b1511",
+   "bg": "#ff9f8e",
+   "min": 4.5,
+   "r": 8.1469891423631
+  },
+  {
+   "n": "Success chip text",
+   "fg": "#84dfae",
+   "bg": "#10301f",
+   "min": 4.5,
+   "r": 8.976777594691763
+  },
+  {
+   "n": "Warning chip text",
+   "fg": "#ffc78e",
+   "bg": "#392410",
+   "min": 4.5,
+   "r": 9.633093465695229
+  },
+  {
+   "n": "Info alert icon on info background",
+   "fg": "#a3c8ff",
+   "bg": "#10294a",
+   "min": 3,
+   "r": 8.527297058638435
+  },
+  {
+   "n": "Form control border vs page (1.4.11)",
+   "fg": "#918ba0",
+   "bg": "#121018",
+   "min": 3,
+   "r": 5.754233193127412
+  },
+  {
+   "n": "Form control border vs card (1.4.11)",
+   "fg": "#918ba0",
+   "bg": "#1c1925",
+   "min": 3,
+   "r": 5.270667703774564
+  },
+  {
+   "n": "Focus ring vs page (1.4.11)",
+   "fg": "#d2b0ff",
+   "bg": "#121018",
+   "min": 3,
+   "r": 10.237375379947277
+  },
+  {
+   "n": "Focus ring vs card (1.4.11)",
+   "fg": "#d2b0ff",
+   "bg": "#1c1925",
+   "min": 3,
+   "r": 9.377062412234121
+  },
+  {
+   "n": "Header/footer text (white on purple)",
+   "fg": "#ffffff",
+   "bg": "#7413dc",
+   "min": 4.5,
+   "r": 7.319084971003906
+  },
+  {
+   "n": "Footer hint text (white 85% on purple)",
+   "fg": "#eadcfa",
+   "bg": "#7413dc",
+   "min": 4.5,
+   "r": 5.616941276553902
+  },
+  {
+   "n": "Focus ring on header/footer (white vs purple)",
+   "fg": "#ffffff",
+   "bg": "#7413dc",
+   "min": 3,
+   "r": 7.319084971003906
+  },
+  {
+   "n": "Colour mode: selected label (white on purple thumb)",
+   "fg": "#ffffff",
+   "bg": "#7413dc",
+   "min": 4.5,
+   "r": 7.319084971003906
+  },
+  {
+   "n": "Colour mode: unselected label on track",
+   "fg": "#f3f0f8",
+   "bg": "#25212f",
+   "min": 4.5,
+   "r": 13.93187269289051
+  },
+  {
+   "n": "Account button open: purple on white",
+   "fg": "#4a0d93",
+   "bg": "#ffffff",
+   "min": 4.5,
+   "r": 11.864034445054513
+  },
+  {
+   "n": "Purple header vs page edge (1.4.11 not required, info)",
+   "fg": "#7413dc",
+   "bg": "#121018",
+   "min": 1,
+   "r": 2.5778481958778903
+  },
+  {
+   "n": "Card border vs page (decorative, info)",
+   "fg": "#3b3648",
+   "bg": "#121018",
+   "min": 1,
+   "r": 1.6236858391590183
+  }
+ ]
+}
