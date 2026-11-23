@@ -1,5 +1,10 @@
 # Changelog
 
+## Unreleased
+
+- `.field` no longer has a bottom margin, so fields in any flex or grid row sit level. Spacing between stacked fields now comes from the container: `form`, `fieldset`, `.card__body`, `.popover__section` or the new `.stack` class. Fields stacked in a plain `div` need `className="stack"` on that div.
+- A heading directly above a field or row of fields gets 0.75rem below it.
+
 ## 0.1.0 (2026-11-23)
 
 First version of the shared theme.

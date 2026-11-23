@@ -61,6 +61,8 @@ import { PageShell, SiteHeader, Main, SiteFooter } from "@wiltshirescouts/theme"
 | Patterns | `TripCard`, `LibraryGrid`, `NoticeBar`, `InfoPanel`, `FactsCard`, `SignupGrid`, `TemplateCard`, `BrevoStatus`, `PlaceholderChips`, `EmailPreviewFrame`, editor layout pieces |
 | Sign-in | `MicrosoftSignInButton`, `SignInCard`, `SignInNotAllowed` |
 
+Fields have no margin of their own, so you can put them in any flex or grid row and they line up. They stack with space between them inside a `form`, `fieldset` or card body; in any other container, add `className="stack"`.
+
 Links are plain `<a href>`. Use a full page navigation or handle clicks in your router.
 
 ### Logos
