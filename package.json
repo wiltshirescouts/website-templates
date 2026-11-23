@@ -48,7 +48,7 @@
     "tailwindcss": "^4"
   },
   "dependencies": {
-    "@tanstack/react-table": "^8.21.3",
+    "@tanstack/react-table": "^9.3.1",
     "@wiltshirescouts/email-template": "git+https://github.com/wiltshirescouts/email-template.git#v1.0.1",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
