@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.2.2 (2026-11-24)
+
+- Fix: a `DataTable` wider than its card (for example seven columns on a laptop-sized window) is no longer clipped on desktop. `.table-wrap` now scrolls sideways, so the last columns stay reachable. Below 640px rows still become cards.
+
 ## 0.2.1 (2026-11-23)
 
 - `DataTable` sorts natively and no longer depends on `@tanstack/react-table` (version 9 is a full API rewrite, and only sort state was used). Behaviour and props are unchanged.

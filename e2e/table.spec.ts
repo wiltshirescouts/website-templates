@@ -49,3 +49,23 @@ test("toolbar fields in a site-built flex row sit level, with room under the hea
   if (!h || !field) throw new Error("not found");
   expect(field.y - (h.y + h.height)).toBeGreaterThanOrEqual(11);
 });
+
+test("a table wider than its card scrolls sideways on desktop instead of clipping the last column", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 1024, height: 800 });
+  await page.goto("/table?mode=light");
+  // Force the table wider than any card, as seven or more columns are on a laptop.
+  await page.addStyleTag({ content: "table.data { min-width: 1600px; }" });
+  const wrap = page.locator(".table-wrap").first();
+  await expect(wrap).toHaveCSS("overflow-x", "auto");
+  const sizes = await wrap.evaluate((el) => ({ scroll: el.scrollWidth, client: el.clientWidth }));
+  expect(sizes.scroll).toBeGreaterThan(sizes.client);
+  // The last column can be scrolled into view and used.
+  const last = page.locator("table.data tbody tr").first().locator("td, th").last();
+  await last.scrollIntoViewIfNeeded();
+  const box = await last.boundingBox();
+  const wrapBox = await wrap.boundingBox();
+  if (!box || !wrapBox) throw new Error("not found");
+  expect(box.x + box.width).toBeLessThanOrEqual(wrapBox.x + wrapBox.width + 1);
+});
