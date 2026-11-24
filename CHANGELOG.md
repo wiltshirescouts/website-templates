@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.2.3 (2026-11-24)
+
+- Header: the logo is 10% smaller (158px wide on desktop, 144px on phones) with more space below it (15px, was 9px), so the header stays 80px tall.
+
 ## 0.2.2 (2026-11-24)
 
 - Fix: a `DataTable` wider than its card (for example seven columns on a laptop-sized window) is no longer clipped on desktop. `.table-wrap` now scrolls sideways, so the last columns stay reachable. Below 640px rows still become cards.
