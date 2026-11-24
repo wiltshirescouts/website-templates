@@ -5,10 +5,17 @@ import {
   Card,
   CardBody,
   CharacterCounter,
+  Checkbox,
   CheckboxCards,
   ConsentCheckbox,
   DateField,
   type DateValue,
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogTitle,
+  DialogTrigger,
   ErrorSummary,
   Field,
   HeroHeader,
@@ -20,6 +27,7 @@ import {
   Select,
   SiteFooter,
   Steps,
+  Switch,
   Textarea,
 } from "@wiltshirescouts/theme";
 import { ArrowLeft, ArrowRight, Tent } from "lucide-react";
@@ -53,6 +61,7 @@ const initialErrors: Errors = {
 };
 
 export default function Form() {
+  const [demoOpen, setDemoOpen] = useState(true);
   const [errors, setErrors] = useState<Errors>(initialErrors);
   const [submits, setSubmits] = useState(0);
   const [surname, setSurname] = useState("");
@@ -221,6 +230,31 @@ export default function Form() {
                 <a href="https://www.wiltshirescouts.org.uk/who-we-are/data-protection/">Privacy policy</a>{" "}
                 and agree to Wiltshire Scouts using my details for this trip.
               </ConsentCheckbox>
+            </CardBody>
+          </Card>
+
+          <Card className="form-section">
+            <CardBody>
+              <h2>Settings controls</h2>
+              <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
+                <Switch id="demo-open" checked={demoOpen} onCheckedChange={setDemoOpen} />
+                <label htmlFor="demo-open">Open for sign-ups</label>
+              </div>
+              <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
+                <Checkbox id="demo-prov" />
+                <label htmlFor="demo-prov">Dates are provisional</label>
+              </div>
+              <Dialog>
+                <DialogTrigger className="btn btn-outline">Open dialog</DialogTrigger>
+                <DialogContent>
+                  <DialogTitle>Create trip</DialogTitle>
+                  <DialogDescription>A short description of what happens next.</DialogDescription>
+                  <DialogFooter>
+                    <Button variant="outline">Cancel</Button>
+                    <Button>Create</Button>
+                  </DialogFooter>
+                </DialogContent>
+              </Dialog>
             </CardBody>
           </Card>
 

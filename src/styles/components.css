@@ -342,6 +342,12 @@
     cursor: pointer;
     text-decoration: none;
   }
+  /* Bare icons (for example lucide components with no .icon class) get a sensible size inside a button; Tailwind size utilities still win */
+  .btn > svg:not(.icon) {
+    width: 1.25rem;
+    height: 1.25rem;
+    flex: none;
+  }
   .btn-primary {
     background: var(--primary);
     color: var(--primary-foreground);
@@ -537,6 +543,14 @@
   .chip-warning {
     color: var(--warning);
     background: var(--warning-soft);
+  }
+  .chip-danger {
+    color: var(--destructive);
+    background: var(--destructive-soft);
+  }
+  .chip-info {
+    color: var(--info);
+    background: var(--info-soft);
   }
   .chip-muted {
     color: var(--muted-foreground);
@@ -2302,5 +2316,144 @@
   :is(h1, h2, h3, h4) + .table-wrap,
   :is(h1, h2, h3, h4) + .mobile-sort {
     margin-top: 0.75rem;
+  }
+}
+
+@layer components {
+  /* Dialog (modal) */
+  .dialog-overlay {
+    position: fixed;
+    inset: 0;
+    background: var(--overlay);
+    z-index: 60;
+  }
+  .dialog {
+    position: fixed;
+    z-index: 61;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: calc(100% - 2rem);
+    max-width: 32rem;
+    max-height: calc(100dvh - 2rem);
+    overflow-y: auto;
+    padding: 1.5rem;
+    background: var(--card);
+    color: var(--card-foreground);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: 0 12px 32px rgb(0 0 0 / 0.3);
+  }
+  .dialog-wide {
+    max-width: 48rem;
+  }
+  .dialog__title {
+    margin: 0 2.5rem 0.5rem 0;
+    font-size: 1.375rem;
+    font-weight: 900;
+    line-height: 1.2;
+  }
+  .dialog__description {
+    margin: 0 0 1rem;
+    color: var(--muted-foreground);
+  }
+  .dialog__footer {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: 0.75rem;
+    margin-top: 1.5rem;
+  }
+  .dialog__close {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    display: grid;
+    place-items: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    border: 0;
+    border-radius: var(--radius);
+    background: transparent;
+    color: inherit;
+    cursor: pointer;
+  }
+  .dialog__close:hover {
+    background: var(--secondary);
+  }
+  .dialog__close:focus-visible,
+  .switch:focus-visible,
+  .checkbox:focus-visible {
+    outline: 3px solid var(--ring);
+    outline-offset: 2px;
+  }
+
+  /* Switch */
+  .switch {
+    position: relative;
+    flex: none;
+    width: 3.25rem;
+    height: 1.75rem;
+    padding: 0;
+    border: 2px solid var(--input);
+    border-radius: 999px;
+    background: var(--card);
+    cursor: pointer;
+  }
+  .switch[data-state="checked"] {
+    background: var(--primary);
+    border-color: var(--primary);
+  }
+  .switch:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+  .switch__thumb {
+    display: grid;
+    place-items: center;
+    width: 1.25rem;
+    height: 1.25rem;
+    border-radius: 50%;
+    background: var(--input);
+    color: var(--card);
+    font-size: 0.8125rem;
+    font-weight: 900;
+    line-height: 1;
+    transform: translateX(0.125rem);
+    transition: transform 0.15s;
+  }
+  .switch__thumb::before {
+    content: "\2715";
+  }
+  .switch[data-state="checked"] .switch__thumb {
+    background: #fff;
+    color: var(--primary);
+    transform: translateX(1.625rem);
+  }
+  .switch[data-state="checked"] .switch__thumb::before {
+    content: "\2713";
+  }
+  @media (pointer: coarse) {
+    .switch {
+      margin-block: 0.25rem;
+    }
+  }
+
+  /* Checkbox */
+  .checkbox {
+    flex: none;
+    width: 1.5rem;
+    height: 1.5rem;
+    margin: 0;
+    accent-color: var(--primary);
+    cursor: pointer;
+  }
+  .checkbox:disabled {
+    cursor: not-allowed;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .switch__thumb {
+      transition: none;
+    }
   }
 }

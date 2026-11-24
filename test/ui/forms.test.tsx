@@ -1,7 +1,15 @@
 // @vitest-environment jsdom
 import { cleanup, fireEvent, render, screen } from "@testing-library/react";
 import { afterEach, describe, expect, it } from "vitest";
-import { CheckboxCards, DateField, ErrorSummary, Field, Input, RadioCards } from "../../src/forms";
+import {
+  CheckboxCards,
+  DateField,
+  ErrorSummary,
+  Field,
+  FieldGroup,
+  Input,
+  RadioCards,
+} from "../../src/forms";
 
 afterEach(cleanup);
 
@@ -120,5 +128,63 @@ describe("ErrorSummary", () => {
   it("renders nothing when there are no errors", () => {
     const { container } = render(<ErrorSummary items={[]} />);
     expect(container.innerHTML).toBe("");
+  });
+});
+
+describe("ErrorSummary links", () => {
+  it("focus the first control when the target is a fieldset", () => {
+    Element.prototype.scrollIntoView = () => {};
+    render(
+      <>
+        <ErrorSummary items={[{ fieldId: "gender", message: "Choose one" }]} autoFocus={false} />
+        <RadioCards
+          id="gender"
+          legend="Gender"
+          name="gender"
+          options={[
+            { value: "a", label: "A" },
+            { value: "b", label: "B" },
+          ]}
+        />
+      </>,
+    );
+    fireEvent.click(screen.getByText("Choose one"));
+    expect(document.activeElement?.getAttribute("id")).toBe("gender-0");
+  });
+
+  it("date fieldsets carry the id", () => {
+    const { container } = render(<DateField legend="Date of birth" id="dob" />);
+    expect(container.querySelector("fieldset")?.id).toBe("dob");
+  });
+});
+
+describe("Field render function and FieldGroup", () => {
+  it("hands a wrapped control its id, required and aria props", () => {
+    render(
+      <Field label="Trip email" required hint="Before the @" error="Enter a name">
+        {(c) => (
+          <div>
+            <Input {...c} />
+            <span>@wiltshirescouts.org.uk</span>
+          </div>
+        )}
+      </Field>,
+    );
+    const input = screen.getByLabelText(/Trip email/);
+    expect(input.getAttribute("aria-invalid")).toBe("true");
+    expect(input.hasAttribute("required")).toBe(true);
+    expect(input.getAttribute("aria-describedby")?.split(" ")).toHaveLength(2);
+  });
+
+  it("groups controls under a legend with hint and error", () => {
+    render(
+      <FieldGroup legend="Born between" id="range" hint="Both included" error="Start is after end">
+        {(g) => <Input aria-label="From" aria-describedby={g.describedBy} />}
+      </FieldGroup>,
+    );
+    const group = screen.getByRole("group", { name: /Born between/ });
+    expect(group.id).toBe("range");
+    expect(screen.getByLabelText("From").getAttribute("aria-describedby")).toBe("range-hint range-err");
+    expect(group.textContent).toContain("Error: Start is after end");
   });
 });

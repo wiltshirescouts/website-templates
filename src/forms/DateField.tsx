@@ -31,7 +31,7 @@ export interface DateFieldProps {
 
 const EMPTY: DateValue = { day: "", month: "", year: "" };
 
-/** Day, month and year in one fieldset. Pass `id` to link an error summary to `<id>-day` etc. */
+/** Day, month and year in one fieldset. Pass `id` (the fieldset's id, which an error summary can link to; the inputs get `<id>-day` etc.). */
 export function DateField({
   legend,
   id,
@@ -83,7 +83,11 @@ export function DateField({
   };
 
   return (
-    <fieldset className={cn("field", error && "has-error", className)} aria-describedby={describedBy}>
+    <fieldset
+      id={base}
+      className={cn("field", error && "has-error", className)}
+      aria-describedby={describedBy}
+    >
       <legend className="label">
         {legend} {required && <RequiredMark />}
       </legend>

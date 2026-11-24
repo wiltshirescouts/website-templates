@@ -17,6 +17,7 @@ export * from "./theme/ThemeProvider";
 export * from "./ui/Alert";
 export * from "./ui/Button";
 export * from "./ui/Card";
+export * from "./ui/Dialog";
 export * from "./ui/PageHeader";
 export * from "./ui/StatusChip";
 export * from "./ui/Steps";

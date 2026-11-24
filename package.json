@@ -1,6 +1,6 @@
 {
   "name": "@wiltshirescouts/theme",
-  "version": "0.2.3",
+  "version": "0.3.0",
   "description": "Shared Scouts Wiltshire website theme: tokens, fonts, logos, layout and form components, Microsoft 365 sign-in and Brevo helpers.",
   "type": "module",
   "sideEffects": [

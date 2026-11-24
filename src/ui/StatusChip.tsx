@@ -5,6 +5,8 @@ import { cn } from "../lib/cn";
 const TONES = {
   success: "chip-success",
   warning: "chip-warning",
+  danger: "chip-danger",
+  info: "chip-info",
   muted: "chip-muted",
   outline: "chip-outline",
   purple: "chip-purple",
@@ -14,14 +16,16 @@ const TONES = {
 export function StatusChip({
   tone = "muted",
   icon: Icon,
+  className,
   children,
 }: {
   tone?: keyof typeof TONES;
   icon?: LucideIcon;
+  className?: string;
   children: ReactNode;
 }) {
   return (
-    <span className={cn("chip", TONES[tone])}>
+    <span className={cn("chip", TONES[tone], className)}>
       {Icon && <Icon className="icon icon-sm" aria-hidden="true" focusable="false" />}
       {children}
     </span>

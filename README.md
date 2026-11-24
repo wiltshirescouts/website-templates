@@ -55,8 +55,8 @@ import { PageShell, SiteHeader, Main, SiteFooter } from "@wiltshirescouts/theme"
 |---|---|
 | Layout | `SiteHeader` (`title` max 60 characters: a type error for literals, a thrown error in development for variables; `nav` items `{label, href, icon, current}`; mobile menu is a right-hand sheet), `HeroHeader` + `HeroMain`, `SiteFooter`, `PageShell`, `Main`, `AdminShell` + `SubNav`, `BrandLogo` |
 | Account | `AccountMenu` variants: `signed-out`, `signed-in` (name, email, role, profile link, sign out), `colour-only` (sites with no accounts). `ColourModeControl` |
-| Page pieces | `PageHeader`, `Breadcrumb`, `Steps`, `Alert` (info, error, warning, success), `StatusChip`, `Tabs`, `Card`, `Button`/`ButtonLink` |
-| Forms | `Field`, `Input`, `Select`, `Textarea`, `DateField`, `RadioCards`, `CheckboxCards`, `ConsentCheckbox`, `ErrorSummary`, `CharacterCounter`. Required fields show a red asterisk only; there is no "(optional)" text |
+| Page pieces | `PageHeader`, `Breadcrumb`, `Steps`, `Alert` (info, error, warning, success), `StatusChip`, `Tabs`, `Card`, `Button`/`ButtonLink`, `Dialog` (`DialogTrigger`, `DialogContent`, `DialogTitle`, `DialogDescription`, `DialogFooter`, `DialogClose`) |
+| Forms | `Field` (a function child for wrapped controls), `FieldGroup`, `Input`, `Select`, `Textarea`, `DateField`, `RadioCards`, `CheckboxCards`, `ConsentCheckbox`, `Checkbox` (plain inline), `Switch`, `ErrorSummary`, `CharacterCounter`. Required fields show a red asterisk only; there is no "(optional)" text |
 | Data | `DataTable` (sortable headings, live announcements, cards below 640px with a "Sort by" select), `TableFoot`, `SearchField` |
 | Patterns | `TripCard`, `LibraryGrid`, `NoticeBar`, `InfoPanel`, `FactsCard`, `SignupGrid`, `TemplateCard`, `BrevoStatus`, `PlaceholderChips`, `EmailPreviewFrame`, editor layout pieces |
 | Sign-in | `MicrosoftSignInButton`, `SignInCard`, `SignInNotAllowed` |

@@ -52,7 +52,12 @@ export function ErrorSummary({
                   const el = document.getElementById(i.fieldId);
                   if (el) {
                     e.preventDefault();
-                    el.focus();
+                    // A fieldset (radio or checkbox cards, dates) is not focusable: go to its first control instead.
+                    const target =
+                      el instanceof HTMLFieldSetElement
+                        ? (el.querySelector<HTMLElement>("input, select, textarea, button") ?? el)
+                        : el;
+                    target.focus();
                     el.scrollIntoView({ block: "center" });
                   }
                 }}

@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.3.0 (2026-11-24)
+
+- New `Dialog` (modal with focus trap, Escape to close, close button): `Dialog`, `DialogTrigger`, `DialogContent` (`wide` option), `DialogTitle`, `DialogDescription`, `DialogFooter`, `DialogClose`.
+- New `Switch` for settings that apply straight away. The thumb shows a tick or a cross, so state is not colour alone.
+- New `Checkbox`: a plain inline checkbox with a label, for admin screens. Use `ConsentCheckbox` for consent and `CheckboxCards` for choices.
+- `StatusChip` has two new tones, `danger` and `info`, and takes a `className`.
+- `ErrorSummary` links to a fieldset (radio or checkbox cards, dates) now focus its first control. `DateField`'s fieldset carries the `id`, so it can be linked.
+- `Field` accepts a function child for a control that sits inside a wrapper (an input with an attached suffix). New `FieldGroup`: a fieldset with legend, hint and error, for several related controls.
+- Buttons: an icon placed directly inside a `.btn` without the `.icon` class (for example a bare lucide component) is 20px, not lucide's 24px default.
+- Added for International Sign-Ups, which needed all three.
+
 ## 0.2.3 (2026-11-24)
 
 - Header: the logo is 10% smaller (158px wide on desktop, 144px on phones) with more space below it (15px, was 9px), so the header stays 80px tall.
