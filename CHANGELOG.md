@@ -7,6 +7,7 @@
 - New `Checkbox`: a plain inline checkbox with a label, for admin screens. Use `ConsentCheckbox` for consent and `CheckboxCards` for choices.
 - `StatusChip` has two new tones, `danger` and `info`.
 - `ErrorSummary` links to a fieldset (radio or checkbox cards, dates) now focus its first control. `DateField`'s fieldset carries the `id`, so it can be linked.
+- Buttons: an icon placed directly inside a `.btn` without a class is 20px, not lucide's 24px default.
 - Added for International Sign-Ups, which needed all three.
 
 ## 0.2.3 (2026-11-24)
