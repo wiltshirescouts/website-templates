@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.3.0 (2026-11-24)
+
+- New `Dialog` (modal with focus trap, Escape to close, close button): `Dialog`, `DialogTrigger`, `DialogContent` (`wide` option), `DialogTitle`, `DialogDescription`, `DialogFooter`, `DialogClose`.
+- New `Switch` for settings that apply straight away. The thumb shows a tick or a cross, so state is not colour alone.
+- New `Checkbox`: a plain inline checkbox with a label, for admin screens. Use `ConsentCheckbox` for consent and `CheckboxCards` for choices.
+- Added for International Sign-Ups, which needed all three.
+
 ## 0.2.3 (2026-11-24)
 
 - Header: the logo is 10% smaller (158px wide on desktop, 144px on phones) with more space below it (15px, was 9px), so the header stays 80px tall.
