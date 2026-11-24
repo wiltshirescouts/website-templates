@@ -68,6 +68,10 @@ export interface SignInCardProps {
   contactEmail?: string;
   passwordNote?: string;
   logoAlt?: string;
+  /** Other ways to sign in, drawn under the Microsoft button (see `OrDivider` and `MagicLinkForm`). */
+  children?: ReactNode;
+  /** Use `section` when the page already has a `main` landmark. */
+  as?: "main" | "section";
 }
 
 /** Centred sign-in card. Renders the `main` landmark. This site never handles a password. */
@@ -82,19 +86,21 @@ export function SignInCard({
   contactEmail,
   passwordNote = "Microsoft handles your password and any two-step check. This site never sees or stores your password.",
   logoAlt = "Scouts Wiltshire",
+  children,
+  as: Wrap = "main",
 }: SignInCardProps) {
   const text =
     lede ??
     (destination ? (
       <>
-        To continue to <strong style={{ color: "var(--foreground)" }}>{destination}</strong>, sign in with
-        your {accountLabel}.
+        To continue to <strong className="signin-destination">{destination}</strong>, sign in with your{" "}
+        {accountLabel}.
       </>
     ) : (
       <>Use your {accountLabel}.</>
     ));
   return (
-    <main id="main" tabIndex={-1} className="signin-wrap">
+    <Wrap id="main" tabIndex={-1} className="signin-wrap">
       <section className="card signin-card" aria-labelledby="signin-h">
         <div className="card__body">
           <div className="signin-logo">
@@ -104,6 +110,7 @@ export function SignInCard({
           <p className="lede">{text}</p>
           {error}
           <MicrosoftSignInButton href={signInHref}>{buttonLabel}</MicrosoftSignInButton>
+          {children}
           <hr className="divider" />
           <p className="signin-note">
             <ShieldCheck className="icon icon-md" aria-hidden="true" focusable="false" />
@@ -119,7 +126,7 @@ export function SignInCard({
           )}
         </div>
       </section>
-    </main>
+    </Wrap>
   );
 }
 
