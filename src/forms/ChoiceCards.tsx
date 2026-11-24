@@ -1,4 +1,4 @@
-import { type ReactNode, useId } from "react";
+import { Fragment, type ReactNode, useId, useState } from "react";
 import { cn } from "../lib/cn";
 import { FieldError, RequiredMark } from "./Field";
 
@@ -6,7 +6,16 @@ export interface ChoiceOption {
   value: string;
   label: ReactNode;
   disabled?: boolean;
+  /** Smaller muted text under the label, inside the card. */
+  hint?: ReactNode;
+  /**
+   * Content revealed under this option only while it is selected. It stays in the DOM (with `hidden`) when not
+   * selected so form state survives. Any option with `conditional` forces the stacked layout.
+   */
+  conditional?: ReactNode;
 }
+
+export type ChoiceLayout = "inline" | "stack" | "grid-2" | "grid-3";
 
 interface BaseProps {
   legend: ReactNode;
@@ -18,6 +27,8 @@ interface BaseProps {
   /** Message without the "Error:" prefix. */
   error?: ReactNode;
   className?: string;
+  /** "inline" (default) wraps cards in a row; "stack" is one per row; "grid-2"/"grid-3" are columns from 640px up. */
+  layout?: ChoiceLayout;
 }
 
 function Group({
@@ -28,8 +39,9 @@ function Group({
   error,
   className,
   radiogroup,
+  layout = "inline",
   children,
-}: Pick<BaseProps, "legend" | "id" | "required" | "hint" | "error" | "className"> & {
+}: Pick<BaseProps, "legend" | "id" | "required" | "hint" | "error" | "className" | "layout"> & {
   radiogroup?: boolean;
   children: ReactNode;
 }) {
@@ -53,10 +65,35 @@ function Group({
         </p>
       )}
       {error && <FieldError id={errId}>{error}</FieldError>}
-      <div className="choice-list" role={radiogroup ? "radiogroup" : undefined}>
+      <div
+        className={cn("choice-list", layout !== "inline" && `choice-list--${layout}`)}
+        role={radiogroup ? "radiogroup" : undefined}
+      >
         {children}
       </div>
     </fieldset>
+  );
+}
+
+function effectiveLayout(layout: ChoiceLayout | undefined, options: ChoiceOption[]): ChoiceLayout {
+  return options.some((o) => o.conditional) ? "stack" : (layout ?? "inline");
+}
+
+function CardText({ label, hint }: { label: ReactNode; hint?: ReactNode }) {
+  if (!hint) return <>{label}</>;
+  return (
+    <span className="choice__text">
+      <span className="choice__label">{label}</span>
+      <span className="choice__hint">{hint}</span>
+    </span>
+  );
+}
+
+function Conditional({ id, show, children }: { id: string; show: boolean; children: ReactNode }) {
+  return (
+    <div className="choice-conditional" id={id} hidden={!show}>
+      {children}
+    </div>
   );
 }
 
@@ -78,29 +115,53 @@ export function RadioCards({
   onChange,
   error,
   required,
+  layout,
   ...rest
 }: RadioCardsProps) {
   const auto = useId();
   const base = rest.id ?? auto;
+  const [inner, setInner] = useState(defaultValue);
+  const current = value !== undefined ? value : inner;
   return (
-    <Group {...rest} id={base} error={error} required={required} radiogroup>
-      {options.map((o, i) => (
-        <label className="choice" key={o.value}>
-          <input
-            type="radio"
-            id={`${base}-${i}`}
-            name={name}
-            value={o.value}
-            disabled={o.disabled}
-            required={required || undefined}
-            aria-invalid={error ? true : undefined}
-            {...(value !== undefined
-              ? { checked: value === o.value, onChange: () => onChange?.(o.value) }
-              : { defaultChecked: defaultValue === o.value, onChange: () => onChange?.(o.value) })}
-          />
-          {o.label}
-        </label>
-      ))}
+    <Group
+      {...rest}
+      id={base}
+      error={error}
+      required={required}
+      radiogroup
+      layout={effectiveLayout(layout, options)}
+    >
+      {options.map((o, i) => {
+        const selected = current === o.value;
+        const condId = `${base}-${i}-conditional`;
+        return (
+          <Fragment key={o.value}>
+            <label className="choice">
+              <input
+                type="radio"
+                id={`${base}-${i}`}
+                name={name}
+                value={o.value}
+                disabled={o.disabled}
+                required={required || undefined}
+                aria-invalid={error ? true : undefined}
+                aria-controls={o.conditional ? condId : undefined}
+                checked={selected}
+                onChange={() => {
+                  setInner(o.value);
+                  onChange?.(o.value);
+                }}
+              />
+              <CardText label={o.label} hint={o.hint} />
+            </label>
+            {o.conditional && (
+              <Conditional id={condId} show={selected}>
+                {o.conditional}
+              </Conditional>
+            )}
+          </Fragment>
+        );
+      })}
     </Group>
   );
 }
@@ -120,33 +181,48 @@ export function CheckboxCards({
   onChange,
   error,
   required: _r,
+  layout,
   ...rest
 }: CheckboxCardsProps) {
   const auto = useId();
   const base = rest.id ?? auto;
-  const toggle = (current: string[], v: string, on: boolean) =>
-    on ? [...current, v] : current.filter((x) => x !== v);
+  const [inner, setInner] = useState<string[]>(defaultValue ?? []);
+  const current = value !== undefined ? value : inner;
+  const toggle = (v: string, on: boolean) =>
+    on ? [...current.filter((x) => x !== v), v] : current.filter((x) => x !== v);
   return (
-    <Group {...rest} id={base} error={error} required={_r}>
-      {options.map((o, i) => (
-        <label className="choice" key={o.value}>
-          <input
-            type="checkbox"
-            id={`${base}-${i}`}
-            name={name}
-            value={o.value}
-            disabled={o.disabled}
-            aria-invalid={error ? true : undefined}
-            {...(value !== undefined
-              ? {
-                  checked: value.includes(o.value),
-                  onChange: (e) => onChange?.(toggle(value, o.value, e.target.checked)),
-                }
-              : { defaultChecked: defaultValue?.includes(o.value) })}
-          />
-          {o.label}
-        </label>
-      ))}
+    <Group {...rest} id={base} error={error} required={_r} layout={effectiveLayout(layout, options)}>
+      {options.map((o, i) => {
+        const selected = current.includes(o.value);
+        const condId = `${base}-${i}-conditional`;
+        return (
+          <Fragment key={o.value}>
+            <label className="choice">
+              <input
+                type="checkbox"
+                id={`${base}-${i}`}
+                name={name}
+                value={o.value}
+                disabled={o.disabled}
+                aria-invalid={error ? true : undefined}
+                aria-controls={o.conditional ? condId : undefined}
+                checked={selected}
+                onChange={(e) => {
+                  const next = toggle(o.value, e.target.checked);
+                  setInner(next);
+                  onChange?.(next);
+                }}
+              />
+              <CardText label={o.label} hint={o.hint} />
+            </label>
+            {o.conditional && (
+              <Conditional id={condId} show={selected}>
+                {o.conditional}
+              </Conditional>
+            )}
+          </Fragment>
+        );
+      })}
     </Group>
   );
 }
