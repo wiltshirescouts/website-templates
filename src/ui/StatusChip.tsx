@@ -16,14 +16,16 @@ const TONES = {
 export function StatusChip({
   tone = "muted",
   icon: Icon,
+  className,
   children,
 }: {
   tone?: keyof typeof TONES;
   icon?: LucideIcon;
+  className?: string;
   children: ReactNode;
 }) {
   return (
-    <span className={cn("chip", TONES[tone])}>
+    <span className={cn("chip", TONES[tone], className)}>
       {Icon && <Icon className="icon icon-sm" aria-hidden="true" focusable="false" />}
       {children}
     </span>
