@@ -44,6 +44,46 @@ for (const width of [320, 390, 1280]) {
     const overflow = await page.evaluate(
       () => document.documentElement.scrollWidth - document.documentElement.clientWidth,
     );
-    expect(overflow).toBeLessThanOrEqual(0);
+    expect(overflow, "no sideways scroll").toBeLessThanOrEqual(0);
+  });
+}
+
+for (const mode of ["light", "dark"] as const) {
+  test(`plain lists in cards and callouts sit inside the box: ${mode}, 320px`, async ({ page }) => {
+    await page.setViewportSize({ width: 320, height: 800 });
+    await page.goto(`/pieces-0-6?mode=${mode}`);
+    const indent = (testId: string) =>
+      page.getByTestId(testId).evaluate((el) => Number.parseFloat(getComputedStyle(el).paddingLeft));
+
+    const card = page.getByTestId("list-card").locator("ul");
+    expect(
+      await card.evaluate((el) => Number.parseFloat(getComputedStyle(el).paddingLeft)),
+      "card list indent",
+    ).toBeGreaterThanOrEqual(20);
+    expect(await indent("list-callout"), "callout list indent").toBeGreaterThanOrEqual(20);
+    // A list that has its own class is left to its site.
+    expect(await indent("list-classed"), "classed list untouched").toBe(0);
+
+    // Room between items.
+    const rects = await card
+      .locator("li")
+      .evaluateAll((els) =>
+        els.map((e) => ({ top: e.getBoundingClientRect().top, bottom: e.getBoundingClientRect().bottom })),
+      );
+    for (let i = 1; i < rects.length; i++) {
+      expect(
+        (rects[i]?.top ?? 0) - (rects[i - 1]?.bottom ?? 0),
+        "space between items",
+      ).toBeGreaterThanOrEqual(4);
+    }
+
+    // The long web address wraps inside the card instead of pushing the page sideways.
+    const [box, last] = await Promise.all([card.boundingBox(), card.locator("li").last().boundingBox()]);
+    if (!box || !last) throw new Error("the list is not on the page");
+    expect(last.x + last.width, "long item stays inside the list").toBeLessThanOrEqual(box.x + box.width + 1);
+    const overflow = await page.evaluate(
+      () => document.documentElement.scrollWidth - document.documentElement.clientWidth,
+    );
+    expect(overflow, "no sideways scroll").toBeLessThanOrEqual(0);
   });
 }

@@ -2794,4 +2794,22 @@
     font-size: 1.125rem;
     font-weight: 800;
   }
+
+  /* ------------------------------------------------------------------ 0.5.1: plain lists inside boxes
+     The reset leaves lists with no left padding, so bullets hung on the edge of a card or callout. Bare lists (no class)
+     in a card body or callout get their bullets inside the box, a little room between items, and long words wrap.
+     :where() keeps this at the lowest specificity: a list with its own class, or any rule a site writes, wins. */
+  :where(.card__body, .callout__body, .empty-state__text) :where(ul, ol):not([class]) {
+    margin: 0 0 0.75rem;
+    padding-left: 1.5rem;
+  }
+  :where(.card__body, .callout__body, .empty-state__text) :where(ul, ol):not([class]):last-child {
+    margin-bottom: 0;
+  }
+  :where(.card__body, .callout__body, .empty-state__text) :where(ul, ol):not([class]) > li {
+    overflow-wrap: anywhere;
+  }
+  :where(.card__body, .callout__body, .empty-state__text) :where(ul, ol):not([class]) > li + li {
+    margin-top: 0.375rem;
+  }
 }

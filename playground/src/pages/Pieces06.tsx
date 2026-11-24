@@ -3,6 +3,10 @@ import {
   Button,
   ButtonLink,
   Callout,
+  Card,
+  CardBody,
+  CardHeader,
+  CardTitle,
   CommentCard,
   ConfirmationPanel,
   DataTable,
@@ -294,6 +298,45 @@ export default function Pieces06() {
           />
         </aside>
       </div>
+
+      <section aria-labelledby="lists-title" style={{ marginTop: "2rem" }}>
+        <h2 id="lists-title" className="section-title">
+          Plain lists in boxes
+        </h2>
+        <div style={{ display: "grid", gap: "1rem" }}>
+          <Card data-testid="list-card">
+            <CardHeader>
+              <CardTitle>Before you start</CardTitle>
+            </CardHeader>
+            <CardBody>
+              <ul>
+                <li>Read the guidance and the rules for visits abroad.</li>
+                <li>Check the travel advice for every country you will visit, every time you submit.</li>
+                <li>Make sure the whole party has insurance that covers every planned activity.</li>
+                <li>
+                  https://www.example.org/a-very-long-web-address-with-no-spaces-in-it/that-keeps-going/and-going/and-going
+                </li>
+              </ul>
+            </CardBody>
+          </Card>
+          <Callout>
+            <p>
+              <strong>As leader of this party, I undertake to:</strong>
+            </p>
+            <ul data-testid="list-callout">
+              <li>Organise this visit in accordance with the rules.</li>
+              <li>Arrange adequate travel insurance for the party.</li>
+            </ul>
+          </Callout>
+          <Card>
+            <CardBody>
+              <ul className="own-list" data-testid="list-classed">
+                <li>A list with its own class keeps whatever its site gives it.</li>
+              </ul>
+            </CardBody>
+          </Card>
+        </div>
+      </section>
     </Site>
   );
 }

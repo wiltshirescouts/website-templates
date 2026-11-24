@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.5.1 (2026-11-24)
+
+- Fix: plain lists (no class) inside a `Card` body, `Callout` or `EmptyState` text now keep their bullets inside the box, with a little room between items, and long words such as web addresses wrap instead of pushing the page sideways. Before, the reset left them with no left padding, so the bullets sat on the edge of the box. The rules use `:where()`, so a list with its own class, or any rule a site writes, still wins.
+
 ## 0.5.0 (2026-11-24)
 
 Everything the Visits Abroad site needed that the theme did not have. All additions are optional props or new exports; nothing changes for existing sites except the two fixes marked below.
