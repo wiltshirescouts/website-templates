@@ -538,6 +538,14 @@
     color: var(--warning);
     background: var(--warning-soft);
   }
+  .chip-danger {
+    color: var(--destructive);
+    background: var(--destructive-soft);
+  }
+  .chip-info {
+    color: var(--info);
+    background: var(--info-soft);
+  }
   .chip-muted {
     color: var(--muted-foreground);
     background: var(--muted);

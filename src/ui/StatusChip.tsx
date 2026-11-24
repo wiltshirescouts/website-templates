@@ -5,6 +5,8 @@ import { cn } from "../lib/cn";
 const TONES = {
   success: "chip-success",
   warning: "chip-warning",
+  danger: "chip-danger",
+  info: "chip-info",
   muted: "chip-muted",
   outline: "chip-outline",
   purple: "chip-purple",
