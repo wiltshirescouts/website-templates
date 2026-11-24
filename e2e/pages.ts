@@ -10,4 +10,6 @@ export const ROUTES = [
   "emails",
   "emails-brevo-not-set-up",
   "email-edit",
+  "forms-0-5",
+  "pieces-0-6",
 ] as const;

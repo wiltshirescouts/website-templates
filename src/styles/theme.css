@@ -1,5 +1,7 @@
 /* Consumers: @import "tailwindcss"; then this file, then fonts.css. */
 @import "./components.css";
+@import "./forms.css";
+@import "./pieces.css";
 @source "../";
 
 /* Tokens use shadcn/ui names. The Tailwind v4 mapping below makes bg-background, text-foreground, border-border etc. work. */
@@ -244,6 +246,11 @@
   .chrome :focus-visible,
   .chrome .is-focus {
     outline-color: var(--chrome-ring);
+  }
+  /* Pages move focus to their main area or a heading so a keyboard or screen reader user starts there: no ring needed. */
+  [tabindex="-1"]:focus,
+  [tabindex="-1"]:focus-visible {
+    outline: none;
   }
   .skip-link {
     position: absolute;
