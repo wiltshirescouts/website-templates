@@ -1,14 +1,33 @@
 import { Check } from "lucide-react";
+import type { CSSProperties } from "react";
+import { cn } from "../lib/cn";
 
-/** The progress card used by multi-step forms. */
-export function Steps({ steps, current }: { steps: string[]; current: number }) {
+export interface StepsProps {
+  steps: string[];
+  /**
+   * The current step, counting from 1. `steps.length + 1` means every step is complete. `0` means the person is not
+   * in the process, and nothing is rendered.
+   */
+  current: number;
+  /** Colour of completed steps. Default primary. */
+  doneTone?: "primary" | "success";
+  ariaLabel?: string;
+}
+
+/** The progress card used by multi-step forms and review stages. A status display, not navigation. */
+export function Steps({ steps, current, doneTone = "primary", ariaLabel = "Progress" }: StepsProps) {
+  if (current < 1) return null;
+  const complete = current > steps.length;
   return (
-    <nav className="steps" aria-label="Progress">
+    <div
+      className={cn("steps", doneTone === "success" && "steps--success", complete && "steps--complete")}
+      role="group"
+      aria-label={ariaLabel}
+      style={{ "--steps": steps.length } as CSSProperties}
+    >
       <div className="steps__head">
-        <strong>{steps[current - 1]}</strong>
-        <span>
-          Step {current} of {steps.length}
-        </span>
+        <strong>{complete ? "Complete" : steps[current - 1]}</strong>
+        <span>{complete ? `All ${steps.length} done` : `Step ${current} of ${steps.length}`}</span>
       </div>
       <ol>
         {steps.map((label, i) => {
@@ -30,6 +49,6 @@ export function Steps({ steps, current }: { steps: string[]; current: number }) 
           );
         })}
       </ol>
-    </nav>
+    </div>
   );
 }
