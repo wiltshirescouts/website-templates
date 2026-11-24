@@ -122,3 +122,29 @@ describe("ErrorSummary", () => {
     expect(container.innerHTML).toBe("");
   });
 });
+
+describe("ErrorSummary links", () => {
+  it("focus the first control when the target is a fieldset", () => {
+    render(
+      <>
+        <ErrorSummary items={[{ fieldId: "gender", message: "Choose one" }]} autoFocus={false} />
+        <RadioCards
+          id="gender"
+          legend="Gender"
+          name="gender"
+          options={[
+            { value: "a", label: "A" },
+            { value: "b", label: "B" },
+          ]}
+        />
+      </>,
+    );
+    fireEvent.click(screen.getByText("Choose one"));
+    expect(document.activeElement?.getAttribute("id")).toBe("gender-0");
+  });
+
+  it("date fieldsets carry the id", () => {
+    const { container } = render(<DateField legend="Date of birth" id="dob" />);
+    expect(container.querySelector("fieldset")?.id).toBe("dob");
+  });
+});
