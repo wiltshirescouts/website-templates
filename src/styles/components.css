@@ -781,7 +781,8 @@
     border-color: var(--primary);
     background: var(--secondary);
     color: var(--secondary-foreground);
-    font-weight: 700;
+    /* Looks bold without changing the text width, so cards never resize or re-wrap when selected (real bold did) */
+    text-shadow: 0.4px 0 0 currentColor, -0.4px 0 0 currentColor;
   }
   :root[data-theme="dark"] .choice:has(input:checked) {
     border-color: var(--ring);

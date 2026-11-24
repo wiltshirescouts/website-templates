@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.3.1 (2026-11-24)
+
+- Fix: radio and checkbox cards no longer jump around when you select one. The selected card used real bold, which is wider, so the row re-wrapped. It now uses a faux-bold shadow with the same width. The heavier border, tint and filled dot are unchanged.
+
 ## 0.3.0 (2026-11-24)
 
 - New `Dialog` (modal with focus trap, Escape to close, close button): `Dialog`, `DialogTrigger`, `DialogContent` (`wide` option), `DialogTitle`, `DialogDescription`, `DialogFooter`, `DialogClose`.
