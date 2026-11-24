@@ -23,18 +23,19 @@
     margin-left: -0.5rem;
     border-radius: var(--radius);
   }
-  /* The supplied PNGs used by the other sites include clear space (80px tall at 176px wide); the cropped SVG does not, so add it. */
+  /* The cropped SVG has no clear space of its own, so add it: 9px above and a little more below, which keeps the
+     header about 80px tall with the logo 10% smaller than the supplied PNG (176px wide). */
   .site-header__bar .brand {
-    padding-block: 0.5625rem;
+    padding-block: 0.5625rem 0.9375rem;
   }
   .brand img {
     display: block;
     height: auto;
-    width: 10rem;
+    width: 9rem;
   }
   @media (min-width: 640px) {
     .brand img {
-      width: 11rem;
+      width: 9.9rem;
     }
   }
   .site-title {
