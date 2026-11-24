@@ -1,5 +1,5 @@
 import { ArrowDown, ArrowUp, ArrowUpDown } from "lucide-react";
-import { type ReactNode, useId, useMemo, useState } from "react";
+import { type HTMLAttributes, type ReactNode, useId, useMemo, useState } from "react";
 import { cn } from "../lib/cn";
 
 export type SortDirection = "ascending" | "descending";
@@ -45,8 +45,19 @@ export interface DataTableProps<T> {
   footer?: ReactNode;
   /** Keep a real table on narrow screens and scroll sideways with the first column pinned, instead of cards. */
   scroll?: boolean;
-  /** Message when there are no rows. */
+  /** Message when there are no rows. Shown centred and muted, across every column. */
   empty?: ReactNode;
+  /** Set false to turn sorting off for every column: no sort buttons, no "Sort by" select, no `aria-sort`. Default true. */
+  sortable?: boolean;
+  /** Hide the caption visually. It stays as the table's accessible name. */
+  captionHidden?: boolean;
+  /**
+   * Which cell is the row header. `true` (default): the column flagged `rowHeader`, else the first. `false`: none, every
+   * cell is a `td`. A string: the `id` of the column to use.
+   */
+  rowHeader?: boolean | string;
+  /** Extra attributes for each body row (class, data attributes, `aria-*`). `index` is the row's position in `data`. */
+  rowProps?: (row: T, index: number) => HTMLAttributes<HTMLTableRowElement>;
   className?: string;
 }
 
@@ -82,16 +93,24 @@ export function DataTable<T>({
   footer,
   scroll,
   empty,
+  sortable: sortableProp = true,
+  captionHidden,
+  rowHeader = true,
+  rowProps,
   className,
 }: DataTableProps<T>) {
   const uid = useId();
   const [inner, setInner] = useState<SortState | null>(defaultSort ?? null);
   const [announce, setAnnounce] = useState("");
-  const sort = sortProp !== undefined ? sortProp : inner;
+  const sort = !sortableProp ? null : sortProp !== undefined ? sortProp : inner;
 
   // Rows in sorted order. Array.prototype.sort is stable, so equal rows keep their original order.
   const rows = useMemo(() => {
-    const all = data.map((original, i) => ({ id: getRowId ? getRowId(original, i) : String(i), original }));
+    const all = data.map((original, i) => ({
+      id: getRowId ? getRowId(original, i) : String(i),
+      index: i,
+      original,
+    }));
     const idx = sort ? columns.findIndex((c, i) => colId(c, i) === sort.id) : -1;
     const col = columns[idx];
     if (!sort || !col) return all;
@@ -110,11 +129,15 @@ export function DataTable<T>({
   const sortBy = (id: string) =>
     apply({ id, direction: sort?.id === id ? opposite(sort.direction) : "ascending" });
 
-  const sortable = columns.map((c, i) => ({ c, id: colId(c, i) })).filter(({ c }) => c.sortable !== false);
-  const rowHeaderIndex = Math.max(
+  const sortable = sortableProp
+    ? columns.map((c, i) => ({ c, id: colId(c, i) })).filter(({ c }) => c.sortable !== false)
+    : [];
+  const flagged = Math.max(
     0,
     columns.findIndex((c) => c.rowHeader),
   );
+  const named = typeof rowHeader === "string" ? columns.findIndex((c, i) => colId(c, i) === rowHeader) : -1;
+  const rowHeaderIndex = rowHeader === false ? -1 : named >= 0 ? named : flagged;
   const dir = sort?.direction ?? "ascending";
   const selectId = `${uid}-sort-select`;
 
@@ -166,7 +189,7 @@ export function DataTable<T>({
         {...(scroll ? { tabIndex: 0, role: "region", "aria-label": `${caption} (scrollable)` } : {})}
       >
         <table className="data">
-          <caption>
+          <caption className={captionHidden ? "sr-only" : undefined}>
             {caption}
             {sort && (
               <>
@@ -179,15 +202,16 @@ export function DataTable<T>({
               {columns.map((c, i) => {
                 const id = colId(c, i);
                 const active = sort?.id === id;
+                const plain = !sortableProp || c.sortable === false;
                 return (
                   <th
                     key={id}
                     scope="col"
                     className={c.numeric ? "num" : undefined}
-                    aria-sort={active ? sort.direction : undefined}
-                    style={c.sortable === false ? { paddingInline: "1rem" } : undefined}
+                    aria-sort={active && sort ? sort.direction : undefined}
+                    style={plain ? { paddingInline: "1rem" } : undefined}
                   >
-                    {c.sortable === false ? (
+                    {plain ? (
                       c.header
                     ) : (
                       <button className="sort-btn" type="button" onClick={() => sortBy(id)}>
@@ -200,7 +224,7 @@ export function DataTable<T>({
                         <ArrowUp className="icon icon-sm icon-asc" aria-hidden="true" focusable="false" />
                         <ArrowDown className="icon icon-sm icon-desc" aria-hidden="true" focusable="false" />
                         <span className="sr-only sort-hint">
-                          {active
+                          {active && sort
                             ? `, sorted ${sort.direction}. Activate to sort ${opposite(sort.direction)}.`
                             : ". Not sorted. Activate to sort ascending."}
                         </span>
@@ -213,12 +237,12 @@ export function DataTable<T>({
           </thead>
           <tbody>
             {rows.length === 0 && (
-              <tr>
+              <tr className="data-empty">
                 <td colSpan={columns.length}>{empty ?? "No results."}</td>
               </tr>
             )}
             {rows.map((r) => (
-              <tr key={r.id}>
+              <tr key={r.id} {...rowProps?.(r.original, r.index)}>
                 {columns.map((c, i) => {
                   const content = c.cell ? c.cell(r.original) : (readValue(c, r.original) as ReactNode);
                   const cls = c.numeric ? "num" : undefined;

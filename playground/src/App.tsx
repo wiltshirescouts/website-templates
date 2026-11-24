@@ -13,6 +13,8 @@ const pages = {
   emails: lazy(() => import("./pages/Emails")),
   "emails-brevo-not-set-up": lazy(() => import("./pages/EmailsBrevoOff")),
   "email-edit": lazy(() => import("./pages/EmailEdit")),
+  "forms-0-5": lazy(() => import("./pages/Forms05")),
+  "pieces-0-6": lazy(() => import("./pages/Pieces06")),
 } as const;
 
 export function App() {

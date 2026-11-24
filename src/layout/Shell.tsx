@@ -11,18 +11,28 @@ export function Main({
   children,
   id = "main",
   narrow,
+  width,
   className,
 }: {
   children: ReactNode;
   id?: string;
+  /** Same as `width="narrow"`. */
   narrow?: boolean;
+  /** `narrow` is 48rem, `medium` 64rem, `default` 72rem. */
+  width?: "narrow" | "medium" | "default";
   className?: string;
 }) {
+  const w = width ?? (narrow ? "narrow" : "default");
   return (
     <main
       id={id}
       tabIndex={-1}
-      className={cn("page-container", narrow && "page-container-narrow", className)}
+      className={cn(
+        "page-container",
+        w === "narrow" && "page-container-narrow",
+        w === "medium" && "page-container-medium",
+        className,
+      )}
     >
       {children}
     </main>

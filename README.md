@@ -61,6 +61,37 @@ import { PageShell, SiteHeader, Main, SiteFooter } from "@wiltshirescouts/theme"
 | Patterns | `TripCard`, `LibraryGrid`, `NoticeBar`, `InfoPanel`, `FactsCard`, `SignupGrid`, `TemplateCard`, `BrevoStatus`, `PlaceholderChips`, `EmailPreviewFrame`, editor layout pieces |
 | Sign-in | `MicrosoftSignInButton`, `SignInCard`, `SignInNotAllowed` |
 
+### Added in 0.5
+
+Form controls:
+
+| Export | What it is |
+| --- | --- |
+| `RadioCards` / `CheckboxCards` | Choice cards. `layout` (`inline`, `stack`, `grid-2`, `grid-3`); options take `hint` and `conditional`. |
+| `NativeDateField` | Single native date input, ISO strings. Compact alternative to `DateField`. |
+| `FieldGroup` | Fieldset with legend. `legendSize="heading"` for a card-style legend. |
+| `CheckboxList` | Plain inline checkboxes in a fieldset, for admin screens. |
+| `SumField` | Numeric boxes with a live announced total. |
+| `FileUpload` | File input with Upload button, progress, status and error handling. |
+| `FileList` | List of files with icon, link or download, size and Remove. |
+| `RepeatableFieldset` | Repeatable row fieldsets with Add and Remove, focus management and announcements. |
+| `Combobox` | Accessible editable combobox with synonyms and a "not listed" option. |
+
+Page pieces:
+
+| Component | Use it for |
+| --- | --- |
+| `ItemCard` | One item in a list: title (optionally a link), chips, meta lines, body, optional callout and action buttons. |
+| `SummaryList` / `SummaryCard` | Check-your-answers rows with optional "Change" links; the card adds a heading and its own Change link. |
+| `Disclosure` | Native details/summary with a turning chevron; `tone="destructive"` for withdraw or delete areas. |
+| `NavTabs` | Page-level tabs that are real links, with `aria-current="page"`. |
+| `CommentCard` / `HistoryList` | A reviewer comment, and a list of versions with a "Current" marker. |
+| `StatCard` / `BarList` / `Meter` | A headline figure, decorative bars (pair with a table) and a labelled progress bar. |
+| `ConfirmationPanel` / `Callout` | The "submitted" panel with a reference, and an inset note or declaration. |
+| `OnThisPage` | An anchor-link card for long pages. |
+
+Also new in 0.5: `EnvironmentBanner`, `BackLink`, `SectionTitle`, `EmptyState`, `Hero`, `StepGrid`/`StepCard`, `CardHeader`/`CardTitle`/`CardDescription`/`CardFooter`, and `OrDivider`/`MagicLinkForm`/`MagicLinkSent`/`MagicLinkConfirm`. `Button` takes `secondary`, `link`, `destructiveOutline` and `sm`; `Alert` takes `icon` and a `neutral` kind; `Main` takes `width`; `SiteFooter` takes `contact`.
+
 Fields have no margin of their own, so you can put them in any flex or grid row and they line up. They stack with space between them inside a `form`, `fieldset` or card body; in any other container, add `className="stack"`.
 
 Links are plain `<a href>`. Use a full page navigation or handle clicks in your router.
@@ -73,7 +104,7 @@ Links are plain `<a href>`. Use a full page navigation or handle clicks in your 
 
 `@wiltshirescouts/theme/server` is runtime-agnostic (Web APIs only), written for Cloudflare Workers and Hono.
 
-Bindings (see `.env.example`; never commit real values): `ENTRA_TENANT_ID`, `ENTRA_CLIENT_ID`, `ENTRA_CLIENT_SECRET`, `SESSION_SECRET` (32+ characters).
+Bindings (see `.env.example`; never commit real values): `ENTRA_TENANT_ID`, `ENTRA_CLIENT_ID`, `ENTRA_CLIENT_SECRET`, `SESSION_SECRET` (32+ characters). Optional: `ENTRA_AUTHORITY_HOST` (an https origin; `http://localhost` is allowed for a local fake identity provider).
 
 ```ts
 import { readEntraConfig, createAuthorisationRequest, handleCallback, createSessionCookie, readSession, safeNext } from "@wiltshirescouts/theme/server";
@@ -83,6 +114,31 @@ import { readEntraConfig, createAuthorisationRequest, handleCallback, createSess
 2. `/auth/callback`: `handleCallback(config, request, { redirectUri, allow })` checks state, exchanges the code, and validates the ID token (signature via the tenant JWKS, issuer, audience, tenant, expiry, nonce). The result is `{ ok: true, user, role, next }` or `{ ok: false, reason }`. Show the "account not allowed" state for `wrong_tenant` and `not_allowed`.
 3. Roles come from Entra group object ids (`allow.groupRoles`) and/or an allow-list (`allow.allowList`), passed in by the site. If a user is in too many groups for Entra to list them (group overage), groups are treated as unavailable and only the allow-list can grant a role.
 4. `createSessionCookie` / `readSession` / `clearSessionCookie`: stateless signed `ws-session` cookie (HttpOnly, Secure, SameSite=Lax, 8 hours by default).
+
+### Sites that keep roles in their own database
+
+`allow.resolve(identity)` is called after the ID token is fully validated and returns the roles to grant (or null). Use it when roles live in your own store, or when every member of the tenant may sign in. A user who ends up with no role is still `not_allowed`. It only decides admit and roles; merge identities and link accounts in your callback route after `ok: true`.
+
+`createAuthorisationRequest` also takes `context` (a short label returned by `handleCallback`, for example `link` for "add Microsoft 365 to my account") and `prompt` (`select_account`, `login`, `consent`).
+
+`refreshSessionCookie(session, secret, { maxAgeSeconds, renewWhenBelowSeconds })` returns a new cookie when the session is past the threshold (default: half its lifetime), or null. Call it from middleware so people filling in a long form stay signed in.
+
+## Magic-link sign-in (server)
+
+For people without a Microsoft 365 account. The theme makes and checks tokens; the site keeps the table, rate limits, sends the email and decides what a link does.
+
+```ts
+import { createMagicLink, consumeMagicLink, looksLikeMagicToken, type MagicLinkStore } from "@wiltshirescouts/theme/server";
+```
+
+- `createMagicLink({ email, purpose, next, origin, subject? }, store)` (or `issueMagicLink`, which stores nothing and returns `tokenHash` so you can insert it in your own batch) returns `{ token, record }`, or null for an implausible address. Only the SHA-256 of the token is stored. `next` goes through `safeNext`. Links last 15 minutes.
+- `consumeMagicLink(token, store)` returns the record on first use and null afterwards (unknown, expired or used). Call it from a **POST** behind a "Continue" button, never from a GET: mail scanners follow links in emails and would use them up.
+- `MagicLinkStore` is two methods, `save(hash, record)` and an atomic, single-use `consume(hash, now)` (in D1: `UPDATE … SET used_at = ? WHERE token_hash = ? AND used_at IS NULL AND expires_at > ? RETURNING …`).
+- Reply identically whether or not an account exists.
+
+## CSRF for JSON APIs (server)
+
+`requireSameOrigin(request, { allowedOrigins?, requireJsonOrHeader? })` is for APIs that use the SameSite=Lax session cookie. Reads pass. A write needs an allowed `Origin` (or `Sec-Fetch-Site` of `same-origin`/`none` when there is none) and, unless switched off for multipart uploads, a JSON content type or an `x-ws-request` header (either forces a CORS preflight from another site). Do not set `Referrer-Policy: no-referrer`: browsers then send `Origin: null` on same-origin posts.
 
 ## Brevo (server)
 

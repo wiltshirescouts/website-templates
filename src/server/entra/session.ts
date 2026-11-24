@@ -73,3 +73,19 @@ export async function readSession(
 /** A `Set-Cookie` header value that removes the session (sign out). */
 export const clearSessionCookie = (o: { secure?: boolean } = {}): string =>
   serialiseCookie(SESSION_COOKIE, "", { maxAge: 0, secure: o.secure });
+
+/**
+ * A fresh cookie for an existing session, or null when it still has more than `renewWhenBelowSeconds` left.
+ * Call it from middleware on each request so people filling in a long form are not signed out mid-way. The new expiry
+ * is always `maxAgeSeconds` from now, so a session can be extended indefinitely while the person stays active.
+ */
+export async function refreshSessionCookie(
+  session: Session,
+  secret: string,
+  o: SessionOptions & { renewWhenBelowSeconds?: number } = {},
+): Promise<string | null> {
+  const maxAge = o.maxAgeSeconds ?? DEFAULT_SESSION_SECONDS;
+  const threshold = o.renewWhenBelowSeconds ?? Math.floor(maxAge / 2);
+  if (session.exp - nowSeconds(o.now) > threshold) return null;
+  return createSessionCookie(session, secret, o);
+}

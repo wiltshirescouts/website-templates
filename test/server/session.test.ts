@@ -1,5 +1,11 @@
 import { describe, expect, it } from "vitest";
-import { clearSessionCookie, createSessionCookie, readSession, safeNext } from "../../src/server";
+import {
+  clearSessionCookie,
+  createSessionCookie,
+  readSession,
+  refreshSessionCookie,
+  safeNext,
+} from "../../src/server";
 
 const SECRET = "s".repeat(40);
 const user = { id: "oid-1", name: "Test Person", email: "test@example.org", role: "editor" };
@@ -93,5 +99,34 @@ describe("safeNext", () => {
     expect(safeNext(null, origin)).toBe("/");
     expect(safeNext(undefined, origin)).toBe("/");
     expect(safeNext(`/${"a".repeat(3000)}`, origin)).toBe("/");
+  });
+});
+
+describe("refreshSessionCookie", () => {
+  it("does nothing while plenty of time is left", async () => {
+    const session = await readSession(
+      requestWith(await createSessionCookie(user, SECRET, { maxAgeSeconds: 3600 })),
+      SECRET,
+    );
+    expect(
+      await refreshSessionCookie(session as NonNullable<typeof session>, SECRET, { maxAgeSeconds: 3600 }),
+    ).toBeNull();
+  });
+  it("issues a new cookie, a full lifetime from now, once under the threshold", async () => {
+    const t0 = new Date("2027-01-01T00:00:00Z");
+    const session = await readSession(
+      requestWith(await createSessionCookie(user, SECRET, { maxAgeSeconds: 3600, now: t0 })),
+      SECRET,
+      { now: t0 },
+    );
+    const later = new Date(t0.getTime() + 40 * 60 * 1000);
+    const c = await refreshSessionCookie(session as NonNullable<typeof session>, SECRET, {
+      maxAgeSeconds: 3600,
+      now: later,
+    });
+    expect(c).toContain("Max-Age=3600");
+    const renewed = await readSession(requestWith(c as string), SECRET, { now: later });
+    expect(renewed?.exp).toBe(Math.floor(later.getTime() / 1000) + 3600);
+    expect(renewed).toMatchObject(user);
   });
 });

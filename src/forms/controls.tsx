@@ -8,13 +8,8 @@ export function Input({
   size: _s,
   width,
   ...p
-}: Omit<ComponentProps<"input">, "width"> & { width?: "sm" | "md" }) {
-  return (
-    <input
-      className={cn("input", width === "sm" && "input-sm", width === "md" && "input-md", className)}
-      {...p}
-    />
-  );
+}: Omit<ComponentProps<"input">, "width"> & { width?: "sm" | "md" | "lg" | "xl" }) {
+  return <input className={cn("input", width && `input-${width}`, className)} {...p} />;
 }
 
 export function Select({ className, ...p }: ComponentProps<"select">) {

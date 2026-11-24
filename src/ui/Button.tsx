@@ -6,14 +6,17 @@ export const buttonVariants = cva("btn", {
   variants: {
     variant: {
       primary: "btn-primary",
+      secondary: "btn-secondary",
       outline: "btn-outline",
       ghost: "btn-ghost",
+      link: "btn-link",
       destructive: "btn-destructive",
+      destructiveOutline: "btn-destructive-outline",
       purpleOutline: "btn-purple-outline",
       onPurple: "btn-on-purple",
       outlineOnPurple: "btn-outline-on-purple",
     },
-    size: { default: "", lg: "btn-lg", icon: "btn-icon" },
+    size: { default: "", sm: "btn-sm", lg: "btn-lg", icon: "btn-icon" },
     blockOnMobile: { true: "btn-block-mobile", false: "" },
   },
   defaultVariants: { variant: "primary", size: "default", blockOnMobile: false },

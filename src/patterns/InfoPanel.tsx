@@ -62,13 +62,16 @@ export function FactsCard({
   facts,
   contact,
   label = "Key facts",
+  layout = "list",
 }: {
   facts: Fact[];
   contact?: ReactNode;
   label?: string;
+  /** `grid` lays the facts out in columns (2 from 640px, 4 from 1024px) instead of one per line. */
+  layout?: "list" | "grid";
 }) {
   return (
-    <section className="card facts" aria-label={label}>
+    <section className={cn("card facts", layout === "grid" && "facts--grid")} aria-label={label}>
       <dl>
         {facts.map(({ icon: Icon, label: l, value }) => (
           <div key={l}>

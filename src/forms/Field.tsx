@@ -86,12 +86,23 @@ export interface FieldGroupProps {
   /** Message without the "Error:" prefix. */
   error?: ReactNode;
   className?: string;
+  /** "label" (default) is a bold label; "heading" is a card-style heading (1.125rem, weight 800). */
+  legendSize?: "label" | "heading";
   /** Content, or a function that receives the ids to put on the controls' `aria-describedby`. */
   children: ReactNode | ((group: { describedBy?: string; invalid?: true }) => ReactNode);
 }
 
 /** Several related controls under one legend (a date range, a set of ticks): the fieldset counterpart of `Field`. */
-export function FieldGroup({ legend, id, required, hint, error, className, children }: FieldGroupProps) {
+export function FieldGroup({
+  legend,
+  id,
+  required,
+  hint,
+  error,
+  className,
+  legendSize = "label",
+  children,
+}: FieldGroupProps) {
   const auto = useId();
   const base = id ?? auto;
   const hintId = hint ? `${base}-hint` : undefined;
@@ -103,7 +114,7 @@ export function FieldGroup({ legend, id, required, hint, error, className, child
       id={base}
       aria-describedby={describedBy}
     >
-      <legend className="label">
+      <legend className={cn("label", legendSize === "heading" && "legend-heading")}>
         {legend} {required && <RequiredMark />}
       </legend>
       {hint && (

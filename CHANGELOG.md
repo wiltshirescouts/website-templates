@@ -1,5 +1,54 @@
 # Changelog
 
+## 0.5.0 (2026-11-24)
+
+Everything the Visits Abroad site needed that the theme did not have. All additions are optional props or new exports; nothing changes for existing sites except the two fixes marked below.
+
+### Layout and page furniture
+- `SiteFooter` has a `contact` line (with a mail icon) above the links. New `EnvironmentBanner` for a "Development mode" strip. `Main` takes `width` (`narrow`, `medium`, `default`).
+- `PageHeader` takes `eyebrow` and `meta`. New `BackLink`, `SectionTitle` and `EmptyState`.
+- `Alert` takes an `icon`, has a `neutral` kind and level-4 headings. **Fix:** lists inside warning and success alerts now use normal ink.
+- `Button` has `secondary`, `link`, `destructiveOutline` and a `sm` size. `Input` has `lg` and `xl` widths.
+- `Card` has `CardHeader`, `CardTitle`, `CardDescription`, `CardFooter` and a `tone` (`accent`, `primary`).
+- New `Hero`, `StepGrid` and `StepCard` for a landing page.
+- **Fix:** `tabindex="-1"` focus targets (the main area, headings) no longer draw a focus ring.
+
+### Sign-in
+- `SignInCard` takes `children` (other ways in) and `as="section"`. New `OrDivider`, `MagicLinkForm`, `MagicLinkSent` and `MagicLinkConfirm` for sign-in by emailed link.
+
+### Form controls
+- `RadioCards` and `CheckboxCards`: new `layout` prop (`"inline"` default, `"stack"`, `"grid-2"`, `"grid-3"`; grids are one column below 640px). `ChoiceOption` gains `hint` (muted text under the label) and `conditional` (content revealed under an option only while it is selected; kept in the DOM with `hidden`, linked with `aria-controls`; forces the stacked layout).
+- Fix: uncontrolled `CheckboxCards` never called `onChange`. It now fires with the new array in both modes. Both card components now track their own selection when uncontrolled.
+- New `NativeDateField`: a single native date input using ISO `YYYY-MM-DD` strings, the compact alternative to `DateField`.
+- `FieldGroup` gains `legendSize` (`"label"` default or `"heading"`, a card-style 1.125rem legend).
+- New `CheckboxList`: plain inline checkboxes in a fieldset with 44px rows, for admin screens.
+- New `SumField`: a fieldset of numeric boxes with a live, announced total (`<output aria-live="polite">`).
+- New `FileUpload` (file input, Upload button, native progress in 25% steps, polite status, focus returns to the input on failure) and `FileList` (type icon, link or download, size, meta, Remove button named after the file).
+- New `RepeatableFieldset`: repeated row fieldsets with Add and Remove, focus moved to the new or neighbouring row, and polite announcements.
+- New `Combobox`: a dependency-free ARIA 1.2 editable combobox with label and synonym filtering, an always-last "not listed" option and a result-count announcement.
+- New exports: `formatSize` and `sumValues` helpers.
+
+### Page pieces
+- Added page pieces: `ItemCard`, `SummaryList`, `SummaryCard`, `Disclosure`, `NavTabs`, `CommentCard`, `HistoryList`, `StatCard`, `BarList`, `Meter`, `ConfirmationPanel`, `Callout` and `OnThisPage`. All are exported from the package root.
+- `Steps` now follows `steps.length` (CSS variable `--steps`), takes `doneTone` (`"primary"` or `"success"`) and `ariaLabel`, renders as a labelled `role="group"` with an `ol` instead of a `nav`, shows "Complete" when `current` is `steps.length + 1`, renders nothing when `current` is `0`, and shows only the heading line below 768px.
+- `StatusChip` has a `solid` tone and an opt-in `wrap` prop for long text.
+- `FactsCard` has `layout="grid"` (2 columns from 640px, 4 from 1024px).
+- `DataTable` has `sortable`, `captionHidden`, `rowHeader` (boolean or column id) and `rowProps`, and a styled empty state.
+- CSS helpers: `.two-col--sticky` (sticky aside from 1024px, width from `--aside-width`) and `.form-actions--sticky`.
+- New tokens `--danger-border` and `--warning-border` (defined in `pieces.css`, light and dark).
+
+## 0.4.0 (2026-11-24)
+
+Server helpers for visits abroad, which keeps roles in its own database and also offers email sign-in. All additions are optional.
+
+- `allow.resolve(identity)` on `handleCallback`: grant roles from the site's own store, or admit any tenant member.
+- `handleCallback` results and `resolve` identities carry `username` (`preferred_username`, else `upn`). Tenant administrators set it, so it is a safer key than `email` for matching accounts by address.
+- `createAuthorisationRequest` takes `context` (returned by `handleCallback`) and `prompt`.
+- `ENTRA_AUTHORITY_HOST` / `authorityHost` on the config: an https origin (http only for localhost), used for the authorise, token, issuer and key-set URLs. For sovereign clouds and local fakes.
+- `refreshSessionCookie`: sliding sessions.
+- New magic-link helpers: `issueMagicLink` (no store, for writing the row in the same batch as the email job), `createMagicLink`, `consumeMagicLink`, an opaque `subject` on records, `looksLikeMagicToken`, `isPlausibleEmail`, `normaliseEmail`, `MagicLinkStore`.
+- New `requireSameOrigin` for CSRF protection of JSON APIs.
+
 ## 0.3.1 (2026-11-24)
 
 - Fix: radio and checkbox cards no longer jump around when you select one. The selected card used real bold, which is wider, so the row re-wrapped. It now uses a faux-bold shadow with the same width. The heavier border, tint and filled dot are unchanged.
