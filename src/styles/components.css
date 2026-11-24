@@ -865,7 +865,9 @@
     background: var(--card);
     border: 1px solid var(--border);
     border-radius: var(--radius);
-    overflow: hidden;
+    /* Keep the rounded corners, but let a table wider than its card scroll sideways instead of clipping its last columns. */
+    overflow-x: auto;
+    overflow-y: hidden;
   }
   table.data {
     width: 100%;
