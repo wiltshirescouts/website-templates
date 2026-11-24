@@ -4,6 +4,8 @@ export interface EntraEnv {
   ENTRA_CLIENT_ID?: string;
   ENTRA_CLIENT_SECRET?: string;
   SESSION_SECRET?: string;
+  /** Optional. Defaults to `https://login.microsoftonline.com`. Set only for sovereign clouds or a local fake. */
+  ENTRA_AUTHORITY_HOST?: string;
 }
 
 export interface EntraConfig {
@@ -11,6 +13,8 @@ export interface EntraConfig {
   clientId: string;
   clientSecret: string;
   sessionSecret: string;
+  /** Origin of the identity provider, no trailing slash. */
+  authorityHost?: string;
 }
 
 /** Thrown when a required binding is missing or malformed. The message names the binding, never its value. */
@@ -48,7 +52,29 @@ export function readEntraConfig(env: EntraEnv): EntraConfig {
   if (sessionSecret.length < MIN_SESSION_SECRET_LENGTH) {
     throw new EntraConfigError(`SESSION_SECRET must be at least ${MIN_SESSION_SECRET_LENGTH} characters.`);
   }
-  return { tenantId, clientId, clientSecret: env.ENTRA_CLIENT_SECRET as string, sessionSecret };
+  const host = env.ENTRA_AUTHORITY_HOST?.trim().replace(/\/+$/, "");
+  if (host) {
+    let url: URL;
+    try {
+      url = new URL(host);
+    } catch {
+      throw new EntraConfigError("ENTRA_AUTHORITY_HOST is not a valid URL.");
+    }
+    const local = url.hostname === "localhost" || url.hostname === "127.0.0.1";
+    if (url.pathname !== "/" || (url.protocol !== "https:" && !(local && url.protocol === "http:"))) {
+      throw new EntraConfigError("ENTRA_AUTHORITY_HOST must be an https origin (http only for localhost).");
+    }
+  }
+  return {
+    tenantId,
+    clientId,
+    clientSecret: env.ENTRA_CLIENT_SECRET as string,
+    sessionSecret,
+    ...(host ? { authorityHost: host } : {}),
+  };
 }
 
-export const authorityFor = (tenantId: string) => `https://login.microsoftonline.com/${tenantId}`;
+export const DEFAULT_AUTHORITY_HOST = "https://login.microsoftonline.com";
+
+export const authorityFor = (tenantId: string, host: string = DEFAULT_AUTHORITY_HOST) =>
+  `${host}/${tenantId}`;

@@ -168,6 +168,7 @@ describe("handleCallback", () => {
       id: "oid-1",
       name: "Test Person",
       email: "Test.Person@Example.org",
+      username: "",
       groups: [GROUP_EDITOR],
       roles: ["editor"],
     });

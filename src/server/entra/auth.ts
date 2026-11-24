@@ -22,6 +22,7 @@ interface AuthState {
   nonce: string;
   verifier: string;
   next: string;
+  context?: string;
   exp: number;
 }
 
@@ -37,6 +38,10 @@ export interface AuthorisationInput {
   redirectUri: string;
   /** Where to go after sign-in. Untrusted; passed through {@link safeNext}. */
   next?: string | null;
+  /** A short label the site wants back from the callback, for example `link` for "add Microsoft 365 to my account". */
+  context?: string;
+  /** Passed to Microsoft as `prompt`, for example `select_account`. */
+  prompt?: "select_account" | "login" | "consent";
   secure?: boolean;
   now?: Date;
 }
@@ -55,10 +60,12 @@ export async function createAuthorisationRequest(
     nonce,
     verifier,
     next: safeNext(input.next, redirect.origin),
+    ...(input.context ? { context: input.context.slice(0, 32) } : {}),
     exp: Math.floor((input.now ?? new Date()).getTime() / 1000) + AUTH_COOKIE_SECONDS,
   };
-  const url = new URL(`${authorityFor(config.tenantId)}/oauth2/v2.0/authorize`);
+  const url = new URL(`${authorityFor(config.tenantId, config.authorityHost)}/oauth2/v2.0/authorize`);
   url.search = new URLSearchParams({
+    ...(input.prompt ? { prompt: input.prompt } : {}),
     client_id: config.clientId,
     response_type: "code",
     redirect_uri: input.redirectUri,
@@ -92,6 +99,27 @@ export async function createAuthorisationRequest(
 export interface AllowRules {
   groupRoles?: Record<string, string>;
   allowList?: Record<string, string>;
+  /**
+   * For sites that keep roles in their own database. Called after the ID token is fully validated, with the verified
+   * identity. Return the roles to grant, or null to add none. A user who ends up with no role at all is `not_allowed`,
+   * so a site that admits every tenant member returns a base role here. It only decides admit and roles: do identity
+   * merging and account linking in the callback route, after `ok: true`.
+   */
+  resolve?: (identity: ResolveIdentity) => Promise<string[] | null> | string[] | null;
+}
+
+export interface ResolveIdentity {
+  /** The Entra object id (`oid`). */
+  id: string;
+  name: string;
+  email: string;
+  /**
+   * The user principal name (`preferred_username`, else `upn`), or an empty string. In a single-tenant directory the
+   * tenant administrators set it, so it is a safer key for matching accounts by address than `email`, which can be
+   * edited or unverified.
+   */
+  username: string;
+  groups: string[];
 }
 
 export interface CallbackOptions {
@@ -109,6 +137,8 @@ export interface SignedInUser {
   id: string;
   name: string;
   email: string;
+  /** See {@link ResolveIdentity.username}. */
+  username: string;
   groups: string[];
   roles: string[];
 }
@@ -128,17 +158,20 @@ export type CallbackResult =
       role: string;
       /** Same-site path to redirect to. */
       next: string;
+      /** The `context` given to {@link createAuthorisationRequest}, if any. */
+      context?: string;
       /** `Set-Cookie` value that removes the ws-auth cookie. */
       clearAuthCookie: string;
     }
   | { ok: false; reason: CallbackFailure; clearAuthCookie: string };
 
 const jwksCache = new Map<string, JWTVerifyGetKey>();
-function remoteJwks(tenantId: string): JWTVerifyGetKey {
-  let jwks = jwksCache.get(tenantId);
+function remoteJwks(config: EntraConfig): JWTVerifyGetKey {
+  const base = authorityFor(config.tenantId, config.authorityHost);
+  let jwks = jwksCache.get(base);
   if (!jwks) {
-    jwks = createRemoteJWKSet(new URL(`${authorityFor(tenantId)}/discovery/v2.0/keys`));
-    jwksCache.set(tenantId, jwks);
+    jwks = createRemoteJWKSet(new URL(`${base}/discovery/v2.0/keys`));
+    jwksCache.set(base, jwks);
   }
   return jwks;
 }
@@ -181,19 +214,22 @@ export async function handleCallback(
   // Exchange the code. The response body is never logged or echoed: it can contain account details.
   let idToken: string;
   try {
-    const res = await (options.fetch ?? fetch)(`${authorityFor(config.tenantId)}/oauth2/v2.0/token`, {
-      method: "POST",
-      headers: { "content-type": "application/x-www-form-urlencoded", accept: "application/json" },
-      body: new URLSearchParams({
-        client_id: config.clientId,
-        client_secret: config.clientSecret,
-        grant_type: "authorization_code",
-        code,
-        redirect_uri: options.redirectUri,
-        code_verifier: saved.verifier,
-        scope: SCOPE,
-      }),
-    });
+    const res = await (options.fetch ?? fetch)(
+      `${authorityFor(config.tenantId, config.authorityHost)}/oauth2/v2.0/token`,
+      {
+        method: "POST",
+        headers: { "content-type": "application/x-www-form-urlencoded", accept: "application/json" },
+        body: new URLSearchParams({
+          client_id: config.clientId,
+          client_secret: config.clientSecret,
+          grant_type: "authorization_code",
+          code,
+          redirect_uri: options.redirectUri,
+          code_verifier: saved.verifier,
+          scope: SCOPE,
+        }),
+      },
+    );
     if (!res.ok) return fail("token_exchange_failed");
     const json = (await res.json()) as { id_token?: unknown };
     if (typeof json.id_token !== "string") return fail("token_exchange_failed");
@@ -206,7 +242,7 @@ export async function handleCallback(
   // foreign-tenant account gets its own reason code.
   let claims: JWTPayload & Record<string, unknown>;
   try {
-    const { payload } = await jwtVerify(idToken, options.jwks ?? remoteJwks(config.tenantId), {
+    const { payload } = await jwtVerify(idToken, options.jwks ?? remoteJwks(config), {
       audience: config.clientId,
       algorithms: ["RS256"],
       currentDate: now,
@@ -220,7 +256,8 @@ export async function handleCallback(
   if (typeof claims.tid !== "string" || claims.tid.toLowerCase() !== config.tenantId.toLowerCase()) {
     return fail("wrong_tenant");
   }
-  if (claims.iss !== `${authorityFor(config.tenantId)}/v2.0`) return fail("invalid_token");
+  if (claims.iss !== `${authorityFor(config.tenantId, config.authorityHost)}/v2.0`)
+    return fail("invalid_token");
   if (typeof claims.nonce !== "string" || !timingSafeEqualStrings(claims.nonce, saved.nonce))
     return fail("invalid_token");
   if (typeof claims.oid !== "string" || !claims.oid) return fail("invalid_token");
@@ -231,6 +268,7 @@ export async function handleCallback(
     claims.hasgroups === true;
   const groups = overage ? [] : strings(claims.groups);
   const email = String(claims.email ?? claims.preferred_username ?? claims.upn ?? "").trim();
+  const username = String(claims.preferred_username ?? claims.upn ?? "").trim();
 
   const roles: string[] = [];
   const add = (r: string | undefined) => {
@@ -241,14 +279,25 @@ export async function handleCallback(
   }
   const listed = email ? options.allow.allowList?.[email.toLowerCase()] : undefined;
   add(Object.hasOwn(options.allow.allowList ?? {}, email.toLowerCase()) ? listed : undefined);
+  if (options.allow.resolve) {
+    const extra = await options.allow.resolve({
+      id: claims.oid,
+      name: String(claims.name ?? email),
+      email,
+      username,
+      groups,
+    });
+    for (const r of extra ?? []) add(r);
+  }
   const [role] = roles;
   if (!role) return fail("not_allowed");
 
   return {
     ok: true,
-    user: { id: claims.oid, name: String(claims.name ?? email), email, groups, roles },
+    user: { id: claims.oid, name: String(claims.name ?? email), email, username, groups, roles },
     role,
     next: typeof saved.next === "string" ? safeNext(saved.next, new URL(options.redirectUri).origin) : "/",
+    ...(typeof saved.context === "string" ? { context: saved.context } : {}),
     clearAuthCookie,
   };
 }
