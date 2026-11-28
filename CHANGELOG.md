@@ -1,5 +1,10 @@
 # Changelog
 
+## Unreleased
+
+- The code is now under the MIT licence (`package.json` `license` was `UNLICENSED`). The Scouts logos and the Nunito Sans fonts are licensed separately; see `LICENSE`. Nothing changes for sites.
+- Added contributor guidance: `CONTRIBUTING.md`, `AGENTS.md`, `SECURITY.md`, a pull request template, issue forms and `CODEOWNERS`. Commit messages and pull request titles must now follow Conventional Commits, checked in CI.
+
 ## 0.5.1 (2026-11-24)
 
 - Fix: plain lists (no class) inside a `Card` body, `Callout` or `EmptyState` text now keep their bullets inside the box, with a little room between items, and long words such as web addresses wrap instead of pushing the page sideways. Before, the reset left them with no left padding, so the bullets sat on the edge of the box. The rules use `:where()`, so a list with its own class, or any rule a site writes, still wins.

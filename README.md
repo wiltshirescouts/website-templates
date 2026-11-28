@@ -2,7 +2,7 @@
 
 The shared website theme for sites under `wiltshirescouts.org.uk`: design tokens (light and dark), Nunito Sans, the Scouts Wiltshire logos, layout and form components, Microsoft 365 sign-in helpers and Brevo email helpers.
 
-React 19, Tailwind 4, Radix, Lucide. The package ships TypeScript source (no build step), like `@wiltshirescouts/email-template`. Private, `UNLICENSED`.
+React 19, Tailwind 4, Radix, Lucide. The package ships TypeScript source (no build step), like `@wiltshirescouts/email-template`. MIT licence for the code; the logos and fonts are licensed separately (see [LICENSE](LICENSE)).
 
 ## Install
 
