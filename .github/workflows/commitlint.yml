@@ -1,0 +1,44 @@
+name: Conventional commits
+on:
+  pull_request:
+    types: [opened, edited, synchronize, reopened]
+permissions:
+  contents: read
+jobs:
+  commits:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+      - name: Check pull request title and commit messages
+        env:
+          PR_TITLE: ${{ github.event.pull_request.title }}
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          pattern='^(feat|fix|docs|style|refactor|perf|test|build|ci|chore|revert)(\([a-z0-9-]+\))?!?: [^ ].*[^.]$'
+          failed=0
+
+          check() {
+            local label="$1" subject="$2"
+            if [[ ! "$subject" =~ $pattern ]]; then
+              echo "::error::$label is not a conventional commit: $subject"
+              failed=1
+            elif (( ${#subject} > 100 )); then
+              echo "::error::$label is longer than 100 characters: $subject"
+              failed=1
+            else
+              echo "ok  $label: $subject"
+            fi
+          }
+
+          check "Pull request title" "$PR_TITLE"
+          while IFS= read -r line; do
+            check "Commit ${line%% *}" "${line#* }"
+          done < <(git log --no-merges --format='%h %s' "$BASE_SHA..$HEAD_SHA")
+
+          if (( failed )); then
+            echo "See CONTRIBUTING.md for the commit message format."
+            exit 1
+          fi
