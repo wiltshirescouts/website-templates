@@ -1,0 +1,35 @@
+name: Feature request
+description: Suggest a new component, prop or helper.
+title: "feat: "
+labels: ["enhancement"]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: What do you need?
+      description: Describe the problem on your site, not just the solution.
+      placeholder: On the Visits Abroad site we need to show…
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Suggested solution
+      description: A new component, a new prop on an existing one, a server helper… Sketches and links welcome.
+  - type: input
+    id: sites
+    attributes:
+      label: Which sites would use it?
+      description: The theme is shared, so things more than one site needs are a better fit.
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: What you do today
+      description: Workarounds or local copies the site uses now.
+  - type: checkboxes
+    id: rules
+    attributes:
+      label: Design rules
+      options:
+        - label: This fits the design rules (Lucide icons, WCAG 2.2 AA, light and dark mode, 44px targets)
+          required: true

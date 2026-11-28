@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Report a security problem
+    url: https://github.com/wiltshirescouts/website-templates/security/advisories/new
+    about: Please report security problems privately, not in a public issue.
+  - name: Read the README
+    url: https://github.com/wiltshirescouts/website-templates#readme
+    about: Installation, Tailwind setup and the component list.

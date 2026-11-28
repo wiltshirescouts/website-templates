@@ -40,7 +40,7 @@
     "type": "git",
     "url": "git+https://github.com/wiltshirescouts/website-templates.git"
   },
-  "license": "UNLICENSED",
+  "license": "MIT",
   "private": true,
   "peerDependencies": {
     "react": "^19",

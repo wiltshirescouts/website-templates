@@ -1,0 +1,71 @@
+name: Bug report
+description: Something in the theme is broken or looks wrong.
+title: "fix: "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reporting a bug. For security problems, do not use this form: see SECURITY.md.
+  - type: input
+    id: version
+    attributes:
+      label: Version
+      description: The release tag or commit the site uses.
+      placeholder: v0.5.1
+    validations:
+      required: true
+  - type: input
+    id: component
+    attributes:
+      label: Component or helper
+      description: Which part of the package is affected?
+      placeholder: DataTable, SiteHeader, requireSameOrigin…
+    validations:
+      required: true
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened
+      description: What did you see? Include error messages and screenshots.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: What you expected
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      description: The smallest example that shows the problem. A playground route is ideal.
+      placeholder: |
+        1. Open /form in the playground with ?mode=dark
+        2. Tab to the "Date of birth" field
+        3. …
+    validations:
+      required: true
+  - type: dropdown
+    id: colour-mode
+    attributes:
+      label: Colour mode
+      multiple: true
+      options:
+        - Light
+        - Dark
+        - Not relevant
+  - type: input
+    id: browser
+    attributes:
+      label: Browser and device
+      placeholder: Safari 19 on iPhone, Chrome 140 on Windows, NVDA…
+  - type: dropdown
+    id: accessibility
+    attributes:
+      label: Is this an accessibility problem?
+      options:
+        - "No"
+        - "Yes"
+        - Not sure
